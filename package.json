@@ -1,0 +1,15 @@
+{
+  "name": "big-data-processing-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Enterprise big data processing platform MVP with a zero-dependency Node API and static admin frontend.",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js",
+    "test": "node tests/api-smoke-test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

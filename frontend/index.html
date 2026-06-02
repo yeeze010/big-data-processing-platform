@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>企业级大数据处理平台</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="主导航">
+        <div class="brand">
+          <span class="brand-mark">BD</span>
+          <div>
+            <strong>大数据处理平台</strong>
+            <span>MVP v0.1.0</span>
+          </div>
+        </div>
+        <nav>
+          <a href="#dashboard" class="active">总览看板</a>
+          <a href="#sources">数据源</a>
+          <a href="#workflows">任务编排</a>
+          <a href="#quality">数据质量</a>
+          <a href="#alerts">告警审计</a>
+          <a href="#deliverables">交付资料</a>
+        </nav>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">F:\软件开发\big-data-processing-platform</p>
+            <h1>企业级大数据处理平台</h1>
+          </div>
+          <div class="topbar-actions">
+            <span id="healthBadge" class="status-pill">健康检查中</span>
+            <button id="refreshButton" type="button">刷新数据</button>
+          </div>
+        </header>
+
+        <section id="dashboard" class="section">
+          <div class="section-heading">
+            <h2>总览看板</h2>
+            <p>展示处理量、任务成功率、质量通过率和待处理告警。</p>
+          </div>
+          <div id="metricsGrid" class="metrics-grid" aria-live="polite"></div>
+          <div class="content-grid">
+            <article class="panel">
+              <div class="panel-header">
+                <h3>处理吞吐趋势</h3>
+                <span>今日 08:00-18:00</span>
+              </div>
+              <div id="throughputChart" class="bar-chart" aria-label="处理吞吐趋势图"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <h3>服务运行状态</h3>
+                <span>实时健康检查</span>
+              </div>
+              <ul id="runtimeList" class="status-list"></ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="sources" class="section">
+          <div class="section-heading">
+            <h2>数据源管理</h2>
+            <p>覆盖关系型数据库、消息队列和对象存储。</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>数据源</th>
+                  <th>类型</th>
+                  <th>负责人</th>
+                  <th>状态</th>
+                  <th>最近检测</th>
+                </tr>
+              </thead>
+              <tbody id="dataSourcesTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="workflows" class="section">
+          <div class="section-heading">
+            <h2>任务编排与调度</h2>
+            <p>管理 DAG 工作流、运行实例、耗时和输出产物。</p>
+          </div>
+          <div class="content-grid">
+            <article class="panel">
+              <div class="panel-header">
+                <h3>工作流定义</h3>
+                <span>DAG / 定时 / 重跑</span>
+              </div>
+              <div id="workflowCards" class="cards"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <h3>最近任务实例</h3>
+                <span>运行状态</span>
+              </div>
+              <ul id="jobList" class="job-list"></ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="quality" class="section">
+          <div class="section-heading">
+            <h2>数据质量</h2>
+            <p>质量规则、检测报告、异常样本和问题闭环。</p>
+          </div>
+          <div class="content-grid">
+            <article class="panel">
+              <div class="panel-header">
+                <h3>质量规则</h3>
+                <span>已启用规则</span>
+              </div>
+              <div id="qualityRules" class="cards compact"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <h3>最新质量报告</h3>
+                <span id="qualityScore">加载中</span>
+              </div>
+              <ul id="qualitySamples" class="status-list"></ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="alerts" class="section">
+          <div class="section-heading">
+            <h2>告警与审计</h2>
+            <p>告警确认、审计追踪和敏感操作留痕。</p>
+          </div>
+          <div class="content-grid">
+            <article class="panel">
+              <div class="panel-header">
+                <h3>告警中心</h3>
+                <span>按优先级处理</span>
+              </div>
+              <ul id="alertList" class="job-list"></ul>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <h3>审计日志</h3>
+                <span>最近操作</span>
+              </div>
+              <ul id="auditList" class="job-list"></ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="deliverables" class="section">
+          <div class="section-heading">
+            <h2>交付资料</h2>
+            <p>建设方案、架构图、数据流图、排期表、测试用例和验收清单已归档。</p>
+          </div>
+          <div id="deliverableLinks" class="deliverables">
+            <a href="/deliverables/docs/企业级大数据处理平台_项目建设方案.md">项目建设方案</a>
+            <a href="/deliverables/diagrams/系统架构图.svg">系统架构图</a>
+            <a href="/deliverables/diagrams/数据流图.svg">数据流图</a>
+            <a href="/deliverables/diagrams/业务流程图.svg">业务流程图</a>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

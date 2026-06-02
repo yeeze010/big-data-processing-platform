@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 900">
+
+<defs>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+  </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/>
+  </marker>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap');
+    text { font-family: 'JetBrains Mono', 'Noto Sans SC', 'Microsoft YaHei', sans-serif; }
+    .title { fill:#e2e8f0; font-size:18px; font-weight:700; }
+    .label { fill:white; font-size:12px; font-weight:700; text-anchor:middle; }
+    .sub { fill:#94a3b8; font-size:9px; text-anchor:middle; }
+    .small { fill:#cbd5e1; font-size:8px; text-anchor:middle; }
+    .edge { stroke:#64748b; stroke-width:1.4; fill:none; marker-end:url(#arrow); }
+    .edgeC { stroke:#22d3ee; stroke-width:1.6; fill:none; marker-end:url(#arrow-cyan); }
+  </style>
+</defs>
+
+<rect width="940" height="900" fill="#0f172a"/><rect width="940" height="900" fill="url(#grid)"/>
+<text x="32" y="42" class="title">企业级大数据处理平台 - 业务流程图</text>
+
+<rect x="365" y="80" width="210" height="58" rx="6" fill="#0f172a"/>
+<rect x="365" y="80" width="210" height="58" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="470.0" y="104" class="label">创建数据源</text>
+<text x="470.0" y="122" class="sub">录入连接信息并测试</text>
+
+
+<rect x="365" y="175" width="210" height="58" rx="6" fill="#0f172a"/>
+<rect x="365" y="175" width="210" height="58" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="470.0" y="199" class="label">配置接入任务</text>
+<text x="470.0" y="217" class="sub">来源 / 目标 / 字段映射</text>
+
+<g transform="translate(470,310)"><polygon points="0,-44 70,0 0,44 -70,0" fill="#0f172a"/><polygon points="0,-44 70,0 0,44 -70,0" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1.5"/><text y="-4" class="label">预检查通过?</text><text y="14" class="small">连接 / 字段 / 权限</text></g>
+
+<rect x="365" y="405" width="210" height="58" rx="6" fill="#0f172a"/>
+<rect x="365" y="405" width="210" height="58" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="470.0" y="429" class="label">发布工作流</text>
+<text x="470.0" y="447" class="sub">生成 DAG 版本</text>
+
+
+<rect x="365" y="500" width="210" height="58" rx="6" fill="#0f172a"/>
+<rect x="365" y="500" width="210" height="58" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="470.0" y="524" class="label">触发运行</text>
+<text x="470.0" y="542" class="sub">定时 / 手动 / 补数</text>
+
+<g transform="translate(470,650)"><polygon points="0,-44 70,0 0,44 -70,0" fill="#0f172a"/><polygon points="0,-44 70,0 0,44 -70,0" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1.5"/><text y="-4" class="label">质量达标?</text><text y="14" class="small">规则 / 阈值 / 趋势</text></g>
+
+<rect x="140" y="725" width="210" height="58" rx="6" fill="#0f172a"/>
+<rect x="140" y="725" width="210" height="58" rx="6" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1.5"/>
+<text x="245.0" y="749" class="label">触发告警</text>
+<text x="245.0" y="767" class="sub">指派负责人处理</text>
+
+
+<rect x="590" y="725" width="210" height="58" rx="6" fill="#0f172a"/>
+<rect x="590" y="725" width="210" height="58" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="695.0" y="749" class="label">归档产物</text>
+<text x="695.0" y="767" class="sub">报告 / 文件 / 审计</text>
+
+<path d="M470 138 L470 175" class="edgeC"/><path d="M470 233 L470 266" class="edgeC"/><path d="M470 354 L470 405" class="edgeC"/>
+<path d="M470 463 L470 500" class="edgeC"/><path d="M470 558 L470 606" class="edgeC"/>
+<path d="M400 650 C300 650 245 690 245 725" class="edge"/><text x="300" y="676" class="small">否</text>
+<path d="M540 650 C650 650 695 690 695 725" class="edgeC"/><text x="640" y="676" class="small">是</text>
+<path d="M400 310 C250 310 250 190 365 205" class="edge"/><text x="260" y="287" class="small">否：修正配置</text>
+</svg>
