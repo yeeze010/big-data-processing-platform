@@ -107,8 +107,25 @@ export function createServer() {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const port = Number(process.env.PORT || 4173);
-  createServer().listen(port, () => {
-    console.log(`Big data processing platform running at http://localhost:${port}`);
-  });
+  const startPort = Number(process.env.PORT || 4173);
+  const maxAttempts = 20;
+
+  function listen(port, attempt = 1) {
+    const server = createServer();
+    server.once("error", (error) => {
+      if (error.code === "EADDRINUSE" && attempt < maxAttempts) {
+        listen(port + 1, attempt + 1);
+        return;
+      }
+
+      console.error(`Unable to start server on port ${port}: ${error.message}`);
+      process.exitCode = 1;
+    });
+
+    server.listen(port, "127.0.0.1", () => {
+      console.log(`Big data processing platform running at http://127.0.0.1:${port}`);
+    });
+  }
+
+  listen(startPort);
 }

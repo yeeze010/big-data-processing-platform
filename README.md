@@ -25,9 +25,11 @@ npm.cmd start
 
 默认访问：
 
-- 前端：`http://localhost:4173`
-- 健康检查：`http://localhost:4173/api/ops/health`
-- 总览 API：`http://localhost:4173/api/dashboard/summary`
+- 前端：`http://127.0.0.1:4173`
+- 健康检查：`http://127.0.0.1:4173/api/ops/health`
+- 总览 API：`http://127.0.0.1:4173/api/dashboard/summary`
+
+如果 `4173` 已被占用，服务会自动尝试后续端口，并在终端输出实际地址。
 
 如需换端口：
 
@@ -70,3 +72,7 @@ deliverables/            已生成的项目交付资料
 - `hotfix/*`：生产紧急修复。
 
 详见 [Git 与 GitHub 版本管理方案](docs/git-github-version-plan.md)。
+
+## 运行验收
+
+详见 [本地运行手册](docs/local-runbook.md)。
