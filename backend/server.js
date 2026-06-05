@@ -4,14 +4,27 @@ import { createServer as createHttpServer } from "node:http";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  abnormalRecords,
+  acceptanceChecklist,
   alerts,
+  assets,
   auditLogs,
+  coreFlow,
   dataSources,
   files,
+  ingestJobs,
   jobInstances,
+  lineage,
+  modules,
+  pages,
+  permissionMatrix,
+  productBrief,
   qualityReport,
   qualityRules,
   summary,
+  syncJobs,
+  transforms,
+  workflow,
   workflows
 } from "./data.js";
 
@@ -25,7 +38,8 @@ const mimeTypes = {
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".svg": "image/svg+xml; charset=utf-8",
-  ".png": "image/png"
+  ".png": "image/png",
+  ".md": "text/markdown; charset=utf-8"
 };
 
 function sendJson(response, data, statusCode = 200) {
@@ -41,7 +55,7 @@ function sendNotFound(response) {
   response.end(JSON.stringify({ code: 404, message: "not found", data: null, traceId: `trace-${Date.now()}` }));
 }
 
-function routeApi(request, response, pathname) {
+function routeApi(response, pathname) {
   if (pathname === "/api/ops/health") {
     sendJson(response, {
       status: "UP",
@@ -53,15 +67,28 @@ function routeApi(request, response, pathname) {
   }
 
   const routes = {
+    "/api/product/brief": productBrief,
+    "/api/product/flow": coreFlow,
+    "/api/product/modules": modules,
+    "/api/product/pages": pages,
     "/api/dashboard/summary": summary,
     "/api/data-sources": dataSources,
+    "/api/ingest-jobs": ingestJobs,
+    "/api/sync-jobs": syncJobs,
+    "/api/transforms": transforms,
+    "/api/workflow/canvas": workflow,
     "/api/workflows": workflows,
     "/api/job-instances": jobInstances,
     "/api/quality-rules": qualityRules,
     "/api/quality-runs/latest/report": qualityReport,
+    "/api/abnormal-records": abnormalRecords,
+    "/api/data-assets": assets,
+    "/api/lineage": lineage,
+    "/api/permissions/matrix": permissionMatrix,
     "/api/files": files,
     "/api/alerts": alerts,
-    "/api/audit-logs": auditLogs
+    "/api/audit-logs": auditLogs,
+    "/api/acceptance/checklist": acceptanceChecklist
   };
 
   if (Object.hasOwn(routes, pathname)) {
@@ -79,10 +106,10 @@ function routeApi(request, response, pathname) {
 
 async function serveStatic(response, pathname) {
   const safePath = pathname === "/" ? "/index.html" : pathname;
-  const roots = safePath.startsWith("/deliverables/") ? [projectRoot] : [frontendRoot];
-  const filePath = normalize(join(roots[0], safePath));
+  const root = safePath.startsWith("/deliverables/") || safePath.startsWith("/docs/") ? projectRoot : frontendRoot;
+  const filePath = normalize(join(root, safePath));
 
-  if (!filePath.startsWith(roots[0]) || !existsSync(filePath) || !statSync(filePath).isFile()) {
+  if (!filePath.startsWith(root) || !existsSync(filePath) || !statSync(filePath).isFile()) {
     const indexHtml = await readFile(join(frontendRoot, "index.html"), "utf8");
     response.writeHead(200, { "Content-Type": mimeTypes[".html"] });
     response.end(indexHtml);
@@ -97,7 +124,7 @@ export function createServer() {
   return createHttpServer(async (request, response) => {
     try {
       const url = new URL(request.url || "/", "http://localhost");
-      if (routeApi(request, response, url.pathname)) return;
+      if (routeApi(response, url.pathname)) return;
       await serveStatic(response, url.pathname);
     } catch (error) {
       response.writeHead(500, { "Content-Type": "application/json; charset=utf-8" });

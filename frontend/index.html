@@ -3,165 +3,339 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>企业级大数据处理平台</title>
+    <title>大数据处理平台</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <div class="app-shell">
-      <aside class="sidebar" aria-label="主导航">
+      <aside class="sidebar" aria-label="大数据处理平台主导航">
         <div class="brand">
           <span class="brand-mark">BD</span>
           <div>
             <strong>大数据处理平台</strong>
-            <span>MVP v0.1.0</span>
+            <span>独立产品演示系统</span>
           </div>
         </div>
-        <nav>
-          <a href="#dashboard" class="active">总览看板</a>
-          <a href="#sources">数据源</a>
-          <a href="#workflows">任务编排</a>
-          <a href="#quality">数据质量</a>
-          <a href="#alerts">告警审计</a>
-          <a href="#deliverables">交付资料</a>
-        </nav>
+        <nav id="mainNav"></nav>
+        <div class="sidebar-note">
+          <span>当前版本</span>
+          <strong>MVP v0.5.0</strong>
+          <p>聚焦数据接入、处理编排、质量治理、资产血缘和审计闭环。</p>
+        </div>
       </aside>
 
       <main>
-        <header class="topbar">
+        <header class="hero">
           <div>
             <p class="eyebrow">F:\软件开发\big-data-processing-platform</p>
-            <h1>企业级大数据处理平台</h1>
+            <h1>大数据处理平台</h1>
+            <p id="productPositioning" class="hero-copy">加载项目定位中</p>
           </div>
-          <div class="topbar-actions">
+          <div class="hero-actions">
             <span id="healthBadge" class="status-pill">健康检查中</span>
-            <button id="refreshButton" type="button">刷新数据</button>
+            <button id="refreshButton" type="button">刷新演示数据</button>
           </div>
         </header>
 
         <section id="dashboard" class="section">
           <div class="section-heading">
-            <h2>总览看板</h2>
-            <p>展示处理量、任务成功率、质量通过率和待处理告警。</p>
+            <div>
+              <p class="section-kicker">Dashboard</p>
+              <h2>总览看板</h2>
+            </div>
+            <p>处理量、质量、告警、资产、血缘和服务健康集中展示。</p>
           </div>
           <div id="metricsGrid" class="metrics-grid" aria-live="polite"></div>
-          <div class="content-grid">
-            <article class="panel">
+          <div class="dashboard-grid">
+            <article class="panel large-panel">
               <div class="panel-header">
-                <h3>处理吞吐趋势</h3>
+                <h3>处理吞吐与失败记录</h3>
                 <span>今日 08:00-18:00</span>
               </div>
-              <div id="throughputChart" class="bar-chart" aria-label="处理吞吐趋势图"></div>
+              <div id="throughputChart" class="bar-chart" aria-label="处理吞吐柱状图"></div>
             </article>
             <article class="panel">
               <div class="panel-header">
-                <h3>服务运行状态</h3>
-                <span>实时健康检查</span>
+                <h3>服务健康</h3>
+                <span>实时检查</span>
               </div>
               <ul id="runtimeList" class="status-list"></ul>
             </article>
           </div>
+          <div id="coreFlow" class="flow-strip"></div>
         </section>
 
         <section id="sources" class="section">
           <div class="section-heading">
-            <h2>数据源管理</h2>
-            <p>覆盖关系型数据库、消息队列和对象存储。</p>
+            <div>
+              <p class="section-kicker">Ingestion</p>
+              <h2>数据接入</h2>
+            </div>
+            <p>数据源、采集任务、同步任务以一个入口管理。</p>
           </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>数据源</th>
-                  <th>类型</th>
-                  <th>负责人</th>
-                  <th>状态</th>
-                  <th>最近检测</th>
-                </tr>
-              </thead>
-              <tbody id="dataSourcesTable"></tbody>
-            </table>
+          <div class="three-grid">
+            <article class="panel">
+              <div class="panel-header">
+                <h3>数据源</h3>
+                <span>连通性与影响任务</span>
+              </div>
+              <div class="table-wrap"><table><tbody id="dataSourcesTable"></tbody></table></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <h3>采集任务</h3>
+                <span>批量 / 流式 / 文件</span>
+              </div>
+              <div id="ingestJobs" class="card-list"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <h3>同步任务</h3>
+                <span>全量 / 增量 / 断点</span>
+              </div>
+              <div id="syncJobs" class="card-list"></div>
+            </article>
           </div>
         </section>
 
-        <section id="workflows" class="section">
+        <section id="operations" class="section">
           <div class="section-heading">
-            <h2>任务编排与调度</h2>
-            <p>管理 DAG 工作流、运行实例、耗时和输出产物。</p>
+            <div>
+              <p class="section-kicker">Operations</p>
+              <h2>操作中心与状态流转</h2>
+            </div>
+            <p>面向日常运营的可操作表单：提交数据源接入申请、触发任务重试或状态更新、生成报表并留下操作时间线。</p>
           </div>
-          <div class="content-grid">
+          <div class="operations-grid">
             <article class="panel">
               <div class="panel-header">
-                <h3>工作流定义</h3>
-                <span>DAG / 定时 / 重跑</span>
+                <h3>数据源接入申请</h3>
+                <span>表单提交后进入待连通状态</span>
               </div>
-              <div id="workflowCards" class="cards"></div>
+              <form id="sourceRequestForm" class="control-form">
+                <label>
+                  数据源名称
+                  <input name="sourceName" type="text" required placeholder="例如：CRM 客户库" />
+                </label>
+                <label>
+                  类型
+                  <select name="sourceType" required>
+                    <option value="PostgreSQL">PostgreSQL</option>
+                    <option value="MySQL">MySQL</option>
+                    <option value="Kafka">Kafka</option>
+                    <option value="S3/MinIO">S3/MinIO</option>
+                    <option value="REST API">REST API</option>
+                  </select>
+                </label>
+                <label>
+                  负责人
+                  <input name="sourceOwner" type="text" required placeholder="例如：数据工程组" />
+                </label>
+                <button type="submit">提交接入申请</button>
+              </form>
+              <div id="sourceRequestList" class="card-list"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-header">
+                <h3>任务状态流转</h3>
+                <span>重试、暂停、置为成功</span>
+              </div>
+              <form id="taskTransitionForm" class="control-form">
+                <label>
+                  任务实例
+                  <select id="jobActionInstance" name="jobId" required></select>
+                </label>
+                <label>
+                  操作
+                  <select name="jobAction" required>
+                    <option value="retry">重跑失败节点</option>
+                    <option value="pause">暂停调度</option>
+                    <option value="success">人工确认成功</option>
+                  </select>
+                </label>
+                <label>
+                  说明
+                  <input name="jobReason" type="text" required placeholder="说明本次操作原因" />
+                </label>
+                <button type="submit">执行状态流转</button>
+              </form>
+              <div id="operationTimeline" class="timeline-list"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-header">
+                <h3>统计报表中心</h3>
+                <span>生成后进入附件列表</span>
+              </div>
+              <form id="reportCenterForm" class="control-form">
+                <label>
+                  报表类型
+                  <select name="reportType" required>
+                    <option value="任务运行日报">任务运行日报</option>
+                    <option value="数据质量报告">数据质量报告</option>
+                    <option value="异常数据处置清单">异常数据处置清单</option>
+                    <option value="资产血缘影响分析">资产血缘影响分析</option>
+                    <option value="权限审计报告">权限审计报告</option>
+                  </select>
+                </label>
+                <label>
+                  统计周期
+                  <input name="reportPeriod" type="date" required value="2026-06-05" />
+                </label>
+                <button type="submit">生成报表</button>
+              </form>
+              <div id="generatedReports" class="card-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="pipeline" class="section">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Workflow</p>
+              <h2>处理编排与调度</h2>
+            </div>
+            <p>清洗转换聚合、DAG 画布、任务状态和失败重试演示。</p>
+          </div>
+          <div class="pipeline-grid">
+            <article class="panel canvas-panel">
+              <div class="panel-header">
+                <h3>数据流画布 / 任务编排</h3>
+                <span id="workflowVersion">加载中</span>
+              </div>
+              <div id="workflowCanvas" class="workflow-canvas"></div>
             </article>
             <article class="panel">
               <div class="panel-header">
-                <h3>最近任务实例</h3>
-                <span>运行状态</span>
+                <h3>清洗转换聚合</h3>
+                <span>规则链路</span>
               </div>
-              <ul id="jobList" class="job-list"></ul>
+              <div id="transforms" class="card-list"></div>
             </article>
           </div>
+          <article class="panel">
+            <div class="panel-header">
+              <h3>任务实例与失败重试</h3>
+              <span>运行状态</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>实例</th><th>工作流</th><th>状态</th><th>开始时间</th><th>耗时</th><th>输出</th><th>重试策略</th></tr>
+                </thead>
+                <tbody id="jobInstancesTable"></tbody>
+              </table>
+            </div>
+          </article>
         </section>
 
         <section id="quality" class="section">
           <div class="section-heading">
-            <h2>数据质量</h2>
-            <p>质量规则、检测报告、异常样本和问题闭环。</p>
+            <div>
+              <p class="section-kicker">Quality</p>
+              <h2>数据质量与异常数据</h2>
+            </div>
+            <p>质量分、规则、异常样本、原因和处理状态。</p>
           </div>
-          <div class="content-grid">
-            <article class="panel">
-              <div class="panel-header">
-                <h3>质量规则</h3>
-                <span>已启用规则</span>
-              </div>
-              <div id="qualityRules" class="cards compact"></div>
-            </article>
-            <article class="panel">
+          <div class="quality-grid">
+            <article class="panel score-panel">
               <div class="panel-header">
                 <h3>最新质量报告</h3>
                 <span id="qualityScore">加载中</span>
               </div>
+              <div id="qualityTrend" class="line-chart"></div>
               <ul id="qualitySamples" class="status-list"></ul>
             </article>
-          </div>
-        </section>
-
-        <section id="alerts" class="section">
-          <div class="section-heading">
-            <h2>告警与审计</h2>
-            <p>告警确认、审计追踪和敏感操作留痕。</p>
-          </div>
-          <div class="content-grid">
             <article class="panel">
               <div class="panel-header">
-                <h3>告警中心</h3>
-                <span>按优先级处理</span>
+                <h3>质量规则</h3>
+                <span>已启用</span>
               </div>
-              <ul id="alertList" class="job-list"></ul>
+              <div id="qualityRules" class="card-list"></div>
             </article>
             <article class="panel">
               <div class="panel-header">
-                <h3>审计日志</h3>
-                <span>最近操作</span>
+                <h3>异常数据问题池</h3>
+                <span>派单闭环</span>
               </div>
-              <ul id="auditList" class="job-list"></ul>
+              <div id="abnormalRecords" class="card-list"></div>
             </article>
           </div>
         </section>
 
-        <section id="deliverables" class="section">
+        <section id="assets" class="section">
           <div class="section-heading">
-            <h2>交付资料</h2>
-            <p>建设方案、架构图、数据流图、排期表、测试用例和验收清单已归档。</p>
+            <div>
+              <p class="section-kicker">Catalog</p>
+              <h2>数据资产目录与血缘关系</h2>
+            </div>
+            <p>资产、字段、敏感等级和上下游影响分析。</p>
           </div>
-          <div id="deliverableLinks" class="deliverables">
-            <a href="/deliverables/docs/企业级大数据处理平台_项目建设方案.md">项目建设方案</a>
-            <a href="/deliverables/diagrams/系统架构图.svg">系统架构图</a>
-            <a href="/deliverables/diagrams/数据流图.svg">数据流图</a>
-            <a href="/deliverables/diagrams/业务流程图.svg">业务流程图</a>
+          <div class="asset-grid">
+            <article class="panel">
+              <div class="panel-header">
+                <h3>资产目录</h3>
+                <span>分层与负责人</span>
+              </div>
+              <div id="assetCards" class="asset-cards"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <h3>血缘关系</h3>
+                <span>从源到报告</span>
+              </div>
+              <div id="lineageGraph" class="lineage-graph"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="governance" class="section">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Governance</p>
+              <h2>告警、文件附件与权限审计</h2>
+            </div>
+            <p>告警通知规则、文件策略、权限矩阵和操作留痕。</p>
+          </div>
+          <div class="governance-grid">
+            <article class="panel"><div class="panel-header"><h3>告警规则</h3><span>优先级</span></div><div id="alertList" class="card-list"></div></article>
+            <article class="panel"><div class="panel-header"><h3>文件附件</h3><span>生命周期</span></div><div id="fileList" class="card-list"></div></article>
+            <article class="panel"><div class="panel-header"><h3>审计日志</h3><span>最近操作</span></div><div id="auditList" class="card-list"></div></article>
+          </div>
+          <article class="panel">
+            <div class="panel-header">
+              <h3>权限矩阵</h3>
+              <span>角色 x 功能</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>功能</th><th>管理员</th><th>工程师</th><th>分析师</th><th>运维</th><th>治理</th><th>审计</th></tr></thead>
+                <tbody id="permissionTable"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <section id="acceptance" class="section">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Acceptance</p>
+              <h2>验收清单与工程规范</h2>
+            </div>
+            <p>Git/GitHub、测试、部署、验收和里程碑全部指向本项目。</p>
+          </div>
+          <div class="acceptance-grid">
+            <article class="panel"><div class="panel-header"><h3>验收清单</h3><span>当前状态</span></div><ul id="acceptanceChecklist" class="check-list"></ul></article>
+            <article class="panel"><div class="panel-header"><h3>工程资料入口</h3><span>Cursor 可查看</span></div><div class="doc-links">
+              <a href="/docs/index.md">文档索引</a>
+              <a href="/docs/requirements/product-scope.md">项目定位与需求</a>
+              <a href="/docs/api/api-plan.md">接口规划</a>
+              <a href="/docs/test/test-plan.md">测试计划</a>
+              <a href="/docs/deployment/deployment-plan.md">部署方案</a>
+              <a href="/docs/acceptance/acceptance-criteria.md">验收标准</a>
+              <a href="/docs/github-engineering-standard.md">Git/GitHub 规范</a>
+            </div></article>
           </div>
         </section>
       </main>
