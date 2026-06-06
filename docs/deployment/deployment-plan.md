@@ -25,7 +25,10 @@
 
 | 变量 | 说明 |
 |---|---|
-| PORT | 本地服务端口 |
+| WEB_PORT | 固定前端端口，必须为 5214 |
+| API_PORT | 固定 API 端口，必须为 8214 |
+| PREVIEW_PORT | 固定预览端口，必须为 6214 |
+| VITE_API_BASE_URL | 前端代理使用的 API 地址 |
 | JWT_SECRET | Token 签名密钥 |
 | DATABASE_URL | PostgreSQL 连接 |
 | REDIS_URL | Redis 连接 |

@@ -4,7 +4,8 @@ import { mkdir, readdir } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
-import { createServer } from "../backend/server.js";
+import { createServer as createApiServer } from "../backend/server.js";
+import { createFrontendServer } from "../scripts/frontend-server.js";
 
 async function loadChromium() {
   try {
@@ -25,13 +26,18 @@ const browserCandidates = [
   "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
 ];
 const executablePath = browserCandidates.find(existsSync);
-const server = createServer();
+const apiServer = createApiServer();
 await new Promise((resolve, reject) => {
-  server.once("error", reject);
-  server.listen(0, "127.0.0.1", resolve);
+  apiServer.once("error", reject);
+  apiServer.listen(0, "127.0.0.1", resolve);
 });
-const { port } = server.address();
-const baseUrl = `http://127.0.0.1:${port}`;
+const apiPort = apiServer.address().port;
+const frontendServer = createFrontendServer({ apiBaseUrl: `http://127.0.0.1:${apiPort}` });
+await new Promise((resolve, reject) => {
+  frontendServer.once("error", reject);
+  frontendServer.listen(0, "127.0.0.1", resolve);
+});
+const baseUrl = `http://127.0.0.1:${frontendServer.address().port}`;
 const outputDir = "tests/screenshots";
 await mkdir(outputDir, { recursive: true });
 
@@ -73,5 +79,6 @@ try {
   console.log(`Visual QA passed: ${baseUrl}`);
 } finally {
   await browser.close();
-  server.close();
+  apiServer.close();
+  frontendServer.close();
 }

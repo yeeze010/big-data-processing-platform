@@ -17,12 +17,6 @@ async function request(path) {
   return payload.data;
 }
 
-async function requestText(path) {
-  const response = await fetch(`${baseUrl}${path}`);
-  assert.equal(response.status, 200, `${path} should return 200`);
-  return response.text();
-}
-
 try {
   const health = await request("/api/ops/health");
   assert.equal(health.status, "UP");
@@ -88,12 +82,6 @@ try {
 
   const acceptance = await request("/api/acceptance/checklist");
   assert.ok(acceptance.every((item) => item.status === "done"));
-
-  const home = await requestText("/");
-  assert.ok(home.includes("操作中心与状态流转"));
-  assert.ok(home.includes("sourceRequestForm"));
-  assert.ok(home.includes("taskTransitionForm"));
-  assert.ok(home.includes("reportCenterForm"));
 
   console.log("API smoke tests passed");
 } finally {

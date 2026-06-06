@@ -7,15 +7,14 @@ cd F:\软件开发\big-data-processing-platform
 npm.cmd start
 ```
 
-服务默认绑定 `127.0.0.1`，从 `4173` 端口启动。如果端口被占用，会自动尝试 `4174`、`4175` 等后续端口，终端会输出实际地址。
+服务端口由根目录 `.env.ports` 固定分配，禁止自动换端口。端口被占用时必须释放冲突进程后重新启动。
 
 ## 验证入口
 
-- 前端首页：`http://127.0.0.1:4173`
-- 健康检查：`http://127.0.0.1:4173/api/ops/health`
-- 总览接口：`http://127.0.0.1:4173/api/dashboard/summary`
-
-如果启动时输出的不是 `4173`，把上面的端口替换成实际端口。
+- 前端首页：`http://127.0.0.1:5214`
+- API 健康检查：`http://127.0.0.1:8214/api/ops/health`
+- 前端代理健康检查：`http://127.0.0.1:5214/api/ops/health`
+- 构建预览：`http://127.0.0.1:6214`
 
 ## 测试
 
@@ -41,6 +40,6 @@ API smoke tests passed
 在启动服务的终端按 `Ctrl+C`。如果是后台进程，可通过端口查找 PID 后停止：
 
 ```powershell
-Get-NetTCPConnection -LocalPort 4173 -State Listen
+Get-NetTCPConnection -LocalPort 5214,6214,8214 -State Listen
 Stop-Process -Id <PID>
 ```

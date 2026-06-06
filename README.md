@@ -23,26 +23,37 @@
 npm.cmd start
 ```
 
-默认访问地址：
+端口由根目录 `.env.ports` 固定分配，禁止自动换端口：
 
-- 前端入口：`http://127.0.0.1:4173`
-- 健康检查：`http://127.0.0.1:4173/api/ops/health`
-- 总览 API：`http://127.0.0.1:4173/api/dashboard/summary`
+- 开发前端：`http://127.0.0.1:5214`
+- API 服务：`http://127.0.0.1:8214`
+- 构建预览：`http://127.0.0.1:6214`
+- 前端代理健康检查：`http://127.0.0.1:5214/api/ops/health`
+- API 健康检查：`http://127.0.0.1:8214/api/ops/health`
 
-如果 `4173` 已被占用，服务会自动尝试后续端口，并在终端输出实际地址。也可以指定端口：
+`npm.cmd start` 同时启动前端和 API。任一固定端口被占用时启动会直接失败，不会自动使用其他端口。
 
 ```powershell
-$env:PORT=4180
-npm.cmd start
+npm.cmd run start:api
+npm.cmd run start:web
+```
+
+构建并启动预览：
+
+```powershell
+npm.cmd run build
+npm.cmd run preview
 ```
 
 ## 本地验证
 
 ```powershell
 npm.cmd test
+npm.cmd run test:ports
+npm.cmd run test:startup
 ```
 
-测试会启动本地服务并验证核心接口：健康检查、项目定位、业务流程、数据源、采集任务、同步任务、转换任务、工作流画布、任务实例、质量报告、异常数据、数据资产、血缘关系、权限矩阵、附件、告警、审计日志和验收清单。
+接口测试验证核心业务接口；端口契约测试验证固定端口、前端 API 代理、CORS 白名单和端口冲突失败行为；启动测试会真实启动并访问 `5214`、`6214`、`8214` 三个服务。
 
 静态前端构建：
 
@@ -59,6 +70,20 @@ npm.cmd run test:visual
 ```
 
 视觉验证使用 Playwright 检查桌面端和移动端布局、工作流节点检查器、任务状态筛选、紧凑视图、控制台错误和横向溢出。视觉测试需要本机安装 Playwright 或可用的 Chrome / Edge。
+
+## Docker
+
+三个服务端口与本地保持一致：
+
+```powershell
+docker compose up --build
+```
+
+- `frontend`：`5214`
+- `api`：`8214`
+- `preview`：`6214`
+
+Docker Compose 会在容器内设置 `HOST=0.0.0.0` 以支持端口映射；本地启动仍默认绑定 `127.0.0.1`。
 
 ## 入口文件
 

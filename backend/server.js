@@ -1,8 +1,6 @@
-import { createReadStream, existsSync, statSync } from "node:fs";
-import { readFile } from "node:fs/promises";
 import { createServer as createHttpServer } from "node:http";
-import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadPorts, listenFixed } from "../scripts/ports.js";
 import {
   abnormalRecords,
   acceptanceChecklist,
@@ -28,36 +26,42 @@ import {
   workflows
 } from "./data.js";
 
-const __dirname = fileURLToPath(new URL(".", import.meta.url));
-const projectRoot = normalize(join(__dirname, ".."));
-const frontendRoot = join(projectRoot, "frontend");
+const ports = loadPorts();
+const host = process.env.HOST || "127.0.0.1";
+const allowedOrigins = new Set([
+  `http://127.0.0.1:${ports.webPort}`,
+  `http://localhost:${ports.webPort}`,
+  `http://127.0.0.1:${ports.previewPort}`,
+  `http://localhost:${ports.previewPort}`
+]);
 
-const mimeTypes = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".js": "text/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
-  ".svg": "image/svg+xml; charset=utf-8",
-  ".png": "image/png",
-  ".md": "text/markdown; charset=utf-8"
-};
+function corsHeaders(request) {
+  const origin = request.headers.origin;
+  return origin && allowedOrigins.has(origin) ? {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type,Authorization",
+    "Vary": "Origin"
+  } : {};
+}
 
-function sendJson(response, data, statusCode = 200) {
+function sendJson(request, response, data, statusCode = 200) {
   response.writeHead(statusCode, {
     "Content-Type": "application/json; charset=utf-8",
-    "Cache-Control": "no-store"
+    "Cache-Control": "no-store",
+    ...corsHeaders(request)
   });
   response.end(JSON.stringify({ code: 0, message: "ok", data, traceId: `trace-${Date.now()}` }));
 }
 
-function sendNotFound(response) {
-  response.writeHead(404, { "Content-Type": "application/json; charset=utf-8" });
+function sendNotFound(request, response) {
+  response.writeHead(404, { "Content-Type": "application/json; charset=utf-8", ...corsHeaders(request) });
   response.end(JSON.stringify({ code: 404, message: "not found", data: null, traceId: `trace-${Date.now()}` }));
 }
 
-function routeApi(response, pathname) {
+function routeApi(request, response, pathname) {
   if (pathname === "/api/ops/health") {
-    sendJson(response, {
+    sendJson(request, response, {
       status: "UP",
       service: "big-data-processing-platform",
       checks: summary.runtime,
@@ -92,67 +96,42 @@ function routeApi(response, pathname) {
   };
 
   if (Object.hasOwn(routes, pathname)) {
-    sendJson(response, routes[pathname]);
+    sendJson(request, response, routes[pathname]);
     return true;
   }
 
   if (pathname.startsWith("/api/")) {
-    sendNotFound(response);
+    sendNotFound(request, response);
     return true;
   }
 
   return false;
 }
 
-async function serveStatic(response, pathname) {
-  const safePath = pathname === "/" ? "/index.html" : pathname;
-  const root = safePath.startsWith("/deliverables/") || safePath.startsWith("/docs/") ? projectRoot : frontendRoot;
-  const filePath = normalize(join(root, safePath));
-
-  if (!filePath.startsWith(root) || !existsSync(filePath) || !statSync(filePath).isFile()) {
-    const indexHtml = await readFile(join(frontendRoot, "index.html"), "utf8");
-    response.writeHead(200, { "Content-Type": mimeTypes[".html"] });
-    response.end(indexHtml);
-    return;
-  }
-
-  response.writeHead(200, { "Content-Type": mimeTypes[extname(filePath)] || "application/octet-stream" });
-  createReadStream(filePath).pipe(response);
-}
-
 export function createServer() {
-  return createHttpServer(async (request, response) => {
+  return createHttpServer((request, response) => {
     try {
       const url = new URL(request.url || "/", "http://localhost");
-      if (routeApi(response, url.pathname)) return;
-      await serveStatic(response, url.pathname);
+      if (request.method === "OPTIONS" && url.pathname.startsWith("/api/")) {
+        response.writeHead(204, corsHeaders(request));
+        response.end();
+        return;
+      }
+      if (routeApi(request, response, url.pathname)) return;
+      sendNotFound(request, response);
     } catch (error) {
-      response.writeHead(500, { "Content-Type": "application/json; charset=utf-8" });
+      response.writeHead(500, { "Content-Type": "application/json; charset=utf-8", ...corsHeaders(request) });
       response.end(JSON.stringify({ code: 500, message: error.message, data: null, traceId: `trace-${Date.now()}` }));
     }
   });
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const startPort = Number(process.env.PORT || 4173);
-  const maxAttempts = 20;
-
-  function listen(port, attempt = 1) {
-    const server = createServer();
-    server.once("error", (error) => {
-      if (error.code === "EADDRINUSE" && attempt < maxAttempts) {
-        listen(port + 1, attempt + 1);
-        return;
-      }
-
-      console.error(`Unable to start server on port ${port}: ${error.message}`);
+  const server = createServer();
+  listenFixed(server, ports.apiPort, "API", host)
+    .then(() => console.log(`API running at http://${host}:${ports.apiPort}`))
+    .catch((error) => {
+      console.error(error.message);
       process.exitCode = 1;
     });
-
-    server.listen(port, "127.0.0.1", () => {
-      console.log(`Big data processing platform running at http://127.0.0.1:${port}`);
-    });
-  }
-
-  listen(startPort);
 }

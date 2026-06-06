@@ -1,0 +1,30 @@
+services:
+  api:
+    build: .
+    command: node backend/server.js
+    environment:
+      HOST: 0.0.0.0
+    ports:
+      - "8214:8214"
+
+  frontend:
+    build: .
+    command: node scripts/frontend-server.js
+    environment:
+      HOST: 0.0.0.0
+      API_BASE_URL: http://api:8214
+    depends_on:
+      - api
+    ports:
+      - "5214:5214"
+
+  preview:
+    build: .
+    command: sh -c "node tests/build-static.js && node scripts/frontend-server.js --preview"
+    environment:
+      HOST: 0.0.0.0
+      API_BASE_URL: http://api:8214
+    depends_on:
+      - api
+    ports:
+      - "6214:6214"
