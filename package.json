@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "node backend/server.js",
-    "test": "node tests/api-smoke-test.js"
+    "build": "node tests/build-static.js",
+    "test": "node tests/api-smoke-test.js",
+    "test:visual": "node tests/visual-qa.js"
   },
   "engines": {
     "node": ">=18"

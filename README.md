@@ -44,6 +44,22 @@ npm.cmd test
 
 测试会启动本地服务并验证核心接口：健康检查、项目定位、业务流程、数据源、采集任务、同步任务、转换任务、工作流画布、任务实例、质量报告、异常数据、数据资产、血缘关系、权限矩阵、附件、告警、审计日志和验收清单。
 
+静态前端构建：
+
+```powershell
+npm.cmd run build
+```
+
+构建会验证控制台关键结构和交互代码，并输出静态产物到 `dist/`。
+
+浏览器视觉验证：
+
+```powershell
+npm.cmd run test:visual
+```
+
+视觉验证使用 Playwright 检查桌面端和移动端布局、工作流节点检查器、任务状态筛选、紧凑视图、控制台错误和横向溢出。视觉测试需要本机安装 Playwright 或可用的 Chrome / Edge。
+
 ## 入口文件
 
 - 前端页面：[frontend/index.html](frontend/index.html)
@@ -52,6 +68,8 @@ npm.cmd test
 - 后端服务：[backend/server.js](backend/server.js)
 - 演示数据：[backend/data.js](backend/data.js)
 - API 冒烟测试：[tests/api-smoke-test.js](tests/api-smoke-test.js)
+- 静态构建检查：[tests/build-static.js](tests/build-static.js)
+- 浏览器视觉检查：[tests/visual-qa.js](tests/visual-qa.js)
 - 文档索引：[docs/index.md](docs/index.md)
 
 ## 目录结构
