@@ -2,8 +2,17 @@ import { createServer as createHttpServer } from "node:http";
 import { fileURLToPath } from "node:url";
 import { loadPorts, listenFixed } from "../scripts/ports.js";
 import {
+  authenticate,
+  buildLineageImpact,
+  buildQualityScore,
+  diagnoseEtlFailure,
+  estimateQueryCost,
+  listSensitiveFields
+} from "./governance-intelligence.js";
+import {
   abnormalRecords,
   acceptanceChecklist,
+  acceptanceCenter,
   alerts,
   assets,
   auditLogs,
@@ -59,7 +68,14 @@ function sendNotFound(request, response) {
   response.end(JSON.stringify({ code: 404, message: "not found", data: null, traceId: `trace-${Date.now()}` }));
 }
 
-function routeApi(request, response, pathname) {
+async function readJson(request) {
+  const chunks = [];
+  for await (const chunk of request) chunks.push(chunk);
+  if (chunks.length === 0) return {};
+  return JSON.parse(Buffer.concat(chunks).toString("utf8"));
+}
+
+async function routeApi(request, response, pathname, url) {
   if (pathname === "/api/ops/health") {
     sendJson(request, response, {
       status: "UP",
@@ -67,6 +83,46 @@ function routeApi(request, response, pathname) {
       checks: summary.runtime,
       checkedAt: new Date().toISOString()
     });
+    return true;
+  }
+
+  if (request.method === "POST" && pathname === "/api/auth/login") {
+    try {
+      const user = authenticate(await readJson(request));
+      if (!user) {
+        sendJson(request, response, { success: false, message: "角色、用户名或密码不匹配。" }, 401);
+        return true;
+      }
+      sendJson(request, response, { success: true, user });
+      return true;
+    } catch (error) {
+      sendJson(request, response, { success: false, message: `登录请求格式错误：${error.message}` }, 400);
+      return true;
+    }
+  }
+
+  if (request.method === "GET" && pathname === "/api/governance/lineage-impact") {
+    sendJson(request, response, buildLineageImpact(url.searchParams.get("asset") || "ods_order"));
+    return true;
+  }
+
+  if (request.method === "GET" && pathname === "/api/governance/data-quality-score") {
+    sendJson(request, response, buildQualityScore());
+    return true;
+  }
+
+  if (request.method === "GET" && pathname === "/api/governance/sensitive-fields") {
+    sendJson(request, response, listSensitiveFields());
+    return true;
+  }
+
+  if (request.method === "POST" && pathname === "/api/governance/etl-diagnostics") {
+    sendJson(request, response, diagnoseEtlFailure(await readJson(request)));
+    return true;
+  }
+
+  if (request.method === "POST" && pathname === "/api/governance/query-cost-estimate") {
+    sendJson(request, response, estimateQueryCost(await readJson(request)));
     return true;
   }
 
@@ -92,7 +148,8 @@ function routeApi(request, response, pathname) {
     "/api/files": files,
     "/api/alerts": alerts,
     "/api/audit-logs": auditLogs,
-    "/api/acceptance/checklist": acceptanceChecklist
+    "/api/acceptance/checklist": acceptanceChecklist,
+    "/api/acceptance/center": acceptanceCenter
   };
 
   if (Object.hasOwn(routes, pathname)) {
@@ -109,7 +166,7 @@ function routeApi(request, response, pathname) {
 }
 
 export function createServer() {
-  return createHttpServer((request, response) => {
+  return createHttpServer(async (request, response) => {
     try {
       const url = new URL(request.url || "/", "http://localhost");
       if (request.method === "OPTIONS" && url.pathname.startsWith("/api/")) {
@@ -117,7 +174,7 @@ export function createServer() {
         response.end();
         return;
       }
-      if (routeApi(request, response, url.pathname)) return;
+      if (await routeApi(request, response, url.pathname, url)) return;
       sendNotFound(request, response);
     } catch (error) {
       response.writeHead(500, { "Content-Type": "application/json; charset=utf-8", ...corsHeaders(request) });

@@ -17,6 +17,18 @@ async function request(path) {
   return payload.data;
 }
 
+async function post(path, body, expectedStatus = 200) {
+  const response = await fetch(`${baseUrl}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  assert.equal(response.status, expectedStatus, `${path} should return ${expectedStatus}`);
+  const payload = await response.json();
+  assert.equal(payload.code, 0, `${path} should use success envelope`);
+  return payload.data;
+}
+
 try {
   const health = await request("/api/ops/health");
   assert.equal(health.status, "UP");
@@ -82,6 +94,42 @@ try {
 
   const acceptance = await request("/api/acceptance/checklist");
   assert.ok(acceptance.every((item) => item.status === "done"));
+
+  const acceptanceCenter = await request("/api/acceptance/center");
+  assert.ok(acceptanceCenter.readiness.length >= 4);
+  assert.ok(acceptanceCenter.releaseGates.some((item) => item.status === "warning"));
+  assert.ok(acceptanceCenter.materials.some((item) => item.path.includes("local-verification-2026-06-13")));
+  assert.ok(acceptanceCenter.risks.length >= 3);
+
+  const login = await post("/api/auth/login", { role: "engineer", username: "engineer", password: "engineer123" });
+  assert.equal(login.success, true);
+  assert.equal(login.user.role, "engineer");
+
+  const deniedLogin = await post("/api/auth/login", { role: "analyst", username: "engineer", password: "engineer123" }, 401);
+  assert.equal(deniedLogin.success, false);
+
+  const qualityScore = await request("/api/governance/data-quality-score");
+  assert.ok(qualityScore.score >= 90);
+  assert.ok(qualityScore.alerts.length >= 1);
+
+  const lineageImpact = await request("/api/governance/lineage-impact?asset=ods_order");
+  assert.ok(lineageImpact.impactedCount >= 2);
+
+  const sensitiveFields = await request("/api/governance/sensitive-fields");
+  assert.ok(sensitiveFields.detectedCount >= 4);
+
+  const etlDiagnosis = await post("/api/governance/etl-diagnostics", {
+    jobId: "job-20260625-001",
+    errorMessage: "unknown column customer_level"
+  });
+  assert.equal(etlDiagnosis.reasonCode, "schema");
+  assert.equal(etlDiagnosis.repairTask.assigneeRole, "engineer");
+
+  const queryCost = await post("/api/governance/query-cost-estimate", {
+    sql: "select * from sales_mart.daily_summary join dim_user on id = user_id"
+  });
+  assert.equal(queryCost.requiresApproval, true);
+  assert.equal(queryCost.level, "high");
 
   console.log("API smoke tests passed");
 } finally {
