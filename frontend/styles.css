@@ -376,7 +376,7 @@ main {
 }
 
 button {
-  min-height: 42px;
+  min-height: 44px;
   border: 1px solid var(--blue);
   padding: 0 16px;
   background: var(--blue);
@@ -520,7 +520,7 @@ h3 {
 .launch-list a {
   display: inline-flex;
   align-items: center;
-  min-height: 42px;
+  min-height: 44px;
   border: 1px solid var(--line-strong);
   padding: 0 14px;
   color: var(--blue);
@@ -751,11 +751,29 @@ h3 {
 .status-pill {
   display: inline-flex;
   align-items: center;
+  gap: 5px;
   min-height: 24px;
   padding: 2px 8px;
   border: 1px solid currentColor;
   font: 11px var(--mono);
   white-space: nowrap;
+}
+
+.status-pill::before {
+  content: "i";
+  font-weight: 800;
+}
+
+.status-normal::before {
+  content: "OK";
+}
+
+.status-warning::before {
+  content: "!";
+}
+
+.status-danger::before {
+  content: "!";
 }
 
 .status-normal {
@@ -872,6 +890,11 @@ h3 {
   color: var(--text);
   background: #fff;
   text-align: left;
+}
+
+.workflow-node:focus-visible {
+  outline: 3px solid #8daeff;
+  outline-offset: 3px;
 }
 
 .workflow-node:hover,
@@ -1183,7 +1206,7 @@ tbody tr:hover {
 }
 
 .table-tools select {
-  min-height: 32px;
+  min-height: 44px;
   border: 1px solid var(--line-strong);
   background: #fff;
   padding: 0 8px;
@@ -1205,7 +1228,7 @@ tbody tr:hover {
 
 .control-form input,
 .control-form select {
-  min-height: 42px;
+  min-height: 44px;
   width: 100%;
   border: 1px solid var(--line-strong);
   background: #fff;
@@ -1473,5 +1496,7 @@ body.compact .workflow-canvas {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
