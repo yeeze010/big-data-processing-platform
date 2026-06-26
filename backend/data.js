@@ -239,3 +239,29 @@ export const acceptanceChecklist = [
   { item: "Git/GitHub、测试、部署、验收、里程碑文档已落盘", owner: "项目经理", status: "done" },
   { item: "本地 API 冒烟测试通过", owner: "测试", status: "done" }
 ];
+
+export const acceptanceCenter = {
+  readiness: [
+    { id: "build", label: "静态构建", value: "通过", detail: "dist 产物已生成，可固定端口预览", status: "done" },
+    { id: "api", label: "接口冒烟", value: "通过", detail: "核心 20+ 接口与健康检查返回正常", status: "done" },
+    { id: "visual", label: "视觉验收", value: "通过", detail: "桌面端与 390px 移动端无横向溢出", status: "done" },
+    { id: "docs", label: "验收材料", value: "待归档", detail: "补齐 2026-06-13 本地验证记录后可关闭", status: "warning" }
+  ],
+  releaseGates: [
+    { name: "构建与启动入口", owner: "工程", status: "done", detail: "npm start、build、preview 均存在，固定端口契约已定义" },
+    { name: "核心业务闭环", owner: "产品/前端", status: "done", detail: "接入、编排、质量、资产、审计、验收中心均有页面入口" },
+    { name: "交互可操作性", owner: "前端", status: "done", detail: "接入申请、任务状态流转、报表生成均可在本地触发并反馈" },
+    { name: "验收材料归档", owner: "项目经理", status: "warning", detail: "需要同步本轮验证记录与 README 链接，避免入口失效" }
+  ],
+  materials: [
+    { name: "本地运行手册", path: "/docs/local-runbook.md", owner: "工程", updatedAt: "2026-06-13", note: "启动方式、固定地址、停止服务说明" },
+    { name: "测试计划", path: "/docs/test/test-plan.md", owner: "测试", updatedAt: "2026-06-05", note: "测试范围、命令与预期结果" },
+    { name: "本地验证记录", path: "/docs/test/local-verification-2026-06-13.md", owner: "测试", updatedAt: "2026-06-13", note: "本轮构建、冒烟、视觉与风险结论" },
+    { name: "验收标准", path: "/docs/acceptance/acceptance-criteria.md", owner: "产品", updatedAt: "2026-06-05", note: "验收口径、边界与退出条件" }
+  ],
+  risks: [
+    { title: "演示数据未持久化", level: "medium", owner: "前端", detail: "接入申请、状态流转和报表生成仅在当前会话内保留。", action: "README 与验收记录中明确标注为 MVP 约束。" },
+    { title: "未接入真实调度引擎", level: "medium", owner: "后端", detail: "任务实例与工作流状态来自内置演示数据。", action: "下一阶段接入真实执行器或增加模拟回放脚本。" },
+    { title: "权限规则为展示态", level: "low", owner: "产品/后端", detail: "权限矩阵可查看，但未接真实登录鉴权。", action: "后续补 SSO、角色权限校验与审计存储。" }
+  ]
+};

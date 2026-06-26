@@ -12,13 +12,13 @@ const [html, css, js] = await Promise.all([
   readFile(join(frontend, "app.js"), "utf8")
 ]);
 
-for (const marker of ["workflowCanvas", "jobStatusFilter", "qualityTrend", "lineageGraph", "toast"]) {
+for (const marker of ["workflowCanvas", "jobStatusFilter", "qualityTrend", "lineageGraph", "releaseGates", "acceptanceMaterials", "acceptanceRisks", "toast"]) {
   assert.ok(html.includes(marker), `frontend/index.html missing ${marker}`);
 }
-for (const marker of ["renderWorkflow", "inspectNode", "renderQuality", "renderLineage", "bindInteractions"]) {
+for (const marker of ["renderWorkflow", "inspectNode", "renderQuality", "renderLineage", "renderReleaseGates", "renderAcceptanceMaterials", "bindInteractions"]) {
   assert.ok(js.includes(marker), `frontend/app.js missing ${marker}`);
 }
-for (const marker of [".command-layout", ".workflow-canvas", ".quality-grid", ".lineage-graph", "@media"]) {
+for (const marker of [".command-layout", ".workflow-canvas", ".quality-grid", ".lineage-graph", ".readiness-grid", ".gate-card", "@media"]) {
   assert.ok(css.includes(marker), `frontend/styles.css missing ${marker}`);
 }
 

@@ -13,3 +13,11 @@ Thumbs.db
 backend/storage/
 uploads/
 tests/screenshots/
+build/
+.vite/
+.next/
+.nuxt/
+.env.local
+target/
+.idea/
+.vscode/.history/

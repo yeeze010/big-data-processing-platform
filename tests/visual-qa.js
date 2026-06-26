@@ -57,6 +57,8 @@ try {
   assert.ok(await desktop.locator(".workflow-node").count() >= 6);
   assert.ok(await desktop.locator(".metric").count() >= 6);
   assert.ok(await desktop.locator(".lineage-node").count() >= 5);
+  assert.ok(await desktop.locator(".readiness-card").count() >= 4);
+  assert.ok(await desktop.locator(".gate-card").count() >= 4);
 
   await desktop.locator(".workflow-node").filter({ hasText: "质量规则检测" }).click();
   assert.ok((await desktop.locator("#nodeInspector").innerText()).includes("质量规则检测"));
@@ -73,6 +75,7 @@ try {
   await mobile.screenshot({ path: `${outputDir}/console-mobile-viewport.png` });
   assert.equal(await mobile.locator("h1").textContent(), "运行控制中心");
   assert.ok(await mobile.locator("#mainNav a").count() >= 7);
+  assert.ok(await mobile.locator(".readiness-card").count() >= 4);
   assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
 
   assert.deepEqual(errors, []);

@@ -4,39 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f4f6f8" />
-    <title>大数据处理平台 · 工程控制台</title>
+    <title>大数据处理平台 - 工程控制台</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#workspace">跳到控制台</a>
     <div class="app-shell">
       <aside class="sidebar" aria-label="平台主导航">
-        <div class="brand">
-          <span class="brand-mark" aria-hidden="true">DP</span>
-          <div>
-            <strong>大数据处理平台</strong>
-            <span>工程控制台 / MVP</span>
+        <div class="sidebar-top">
+          <div class="brand">
+            <span class="brand-mark" aria-hidden="true">DP</span>
+            <div>
+              <strong>大数据处理平台</strong>
+              <span>工程控制台 / MVP</span>
+            </div>
           </div>
+          <button
+            id="navToggle"
+            class="nav-toggle button-secondary"
+            type="button"
+            aria-expanded="false"
+            aria-controls="navPanel"
+          >
+            导航
+          </button>
         </div>
-        <nav id="mainNav" aria-label="功能导航"></nav>
-        <div class="sidebar-runtime">
-          <div class="sidebar-runtime-head">
-            <span>运行环境</span>
-            <strong>LOCAL-01</strong>
+
+        <div id="navPanel" class="nav-panel">
+          <nav id="mainNav" aria-label="功能导航"></nav>
+          <div class="sidebar-runtime">
+            <div class="sidebar-runtime-head">
+              <span>运行环境</span>
+              <strong>LOCAL-01</strong>
+            </div>
+            <dl>
+              <div><dt>调度时区</dt><dd>Asia/Shanghai</dd></div>
+              <div><dt>工作流版本</dt><dd>v0.5.0</dd></div>
+              <div><dt>接口模式</dt><dd>演示数据</dd></div>
+            </dl>
           </div>
-          <dl>
-            <div><dt>调度时区</dt><dd>Asia/Shanghai</dd></div>
-            <div><dt>工作流版本</dt><dd>v0.5.0</dd></div>
-            <div><dt>接口模式</dt><dd>演示数据</dd></div>
-          </dl>
         </div>
       </aside>
 
       <main id="workspace">
         <header class="command-bar">
-          <div class="breadcrumb">
-            <span>数据工程</span>
-            <strong>运行总览</strong>
+          <div class="command-bar-main">
+            <div class="breadcrumb">
+              <span>数据工程</span>
+              <strong>运行总览</strong>
+            </div>
+            <p class="command-summary">
+              面向数据接入、采集同步、处理编排、质量治理、资产血缘和验收闭环的独立产品控制台。
+            </p>
           </div>
           <div class="command-actions">
             <label class="search-field">
@@ -50,12 +69,44 @@
         </header>
 
         <section id="dashboard" class="section command-center">
-          <div class="section-heading">
-            <div>
-              <p class="section-kicker">CONTROL CENTER / 2026-06-06</p>
+          <div class="hero-grid">
+            <article class="hero-panel">
+              <p class="section-kicker">CONTROL CENTER / 2026-06-13</p>
               <h1>运行控制中心</h1>
-            </div>
-            <p id="productPositioning">加载平台定位中</p>
+              <p id="productPositioning" class="hero-copy">加载平台定位中</p>
+              <div class="hero-actions">
+                <a href="#pipeline">查看处理编排</a>
+                <a href="#operations">进入操作中心</a>
+                <a href="#acceptance">打开验收中心</a>
+              </div>
+            </article>
+            <aside class="hero-side">
+              <article class="panel emphasis-panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="panel-index">TODAY / FOCUS</p>
+                    <h2>今日重点</h2>
+                  </div>
+                  <span>需要跟进</span>
+                </div>
+                <div id="focusCards" class="focus-cards"></div>
+              </article>
+              <article class="panel launch-panel">
+                <div class="panel-header">
+                  <div>
+                    <p class="panel-index">RELEASE / GATE</p>
+                    <h2>验收闸口</h2>
+                  </div>
+                  <span>桌面与移动端</span>
+                </div>
+                <div id="readinessCards" class="readiness-grid" aria-live="polite"></div>
+                <div class="launch-list">
+                  <a href="#sources">数据接入与采集</a>
+                  <a href="#quality">质量治理与异常闭环</a>
+                  <a href="#governance">告警审计与权限矩阵</a>
+                </div>
+              </article>
+            </aside>
           </div>
 
           <div id="metricsGrid" class="metrics-grid" aria-live="polite"></div>
@@ -80,7 +131,7 @@
               <div id="nodeInspector" class="node-inspector" aria-live="polite">
                 <span>节点检查器</span>
                 <strong>选择画布节点查看状态</strong>
-                <p>节点类型、运行状态和上下游关系将在这里显示。</p>
+                <p>节点类型、运行状态和上下游关系会在这里显示。</p>
               </div>
             </article>
 
@@ -193,7 +244,7 @@
           </div>
           <div class="asset-grid">
             <article class="panel"><div class="panel-header"><div><p class="panel-index">12 / CATALOG</p><h3>资产目录</h3></div><span>分层与敏感等级</span></div><div id="assetCards" class="asset-cards"></div></article>
-            <article class="panel"><div class="panel-header"><div><p class="panel-index">13 / LINEAGE</p><h3>端到端血缘</h3></div><span>源 → 报告</span></div><div id="lineageGraph" class="lineage-graph"></div></article>
+            <article class="panel"><div class="panel-header"><div><p class="panel-index">13 / LINEAGE</p><h3>端到端血缘</h3></div><span>源 -> 报告</span></div><div id="lineageGraph" class="lineage-graph"></div></article>
           </div>
         </section>
 
@@ -229,7 +280,7 @@
             <article class="panel"><div class="panel-header"><h3>文件附件</h3><span>生命周期</span></div><div id="fileList" class="card-list"></div></article>
             <article class="panel"><div class="panel-header"><h3>审计日志</h3><span>最近操作</span></div><div id="auditList" class="card-list"></div></article>
           </div>
-          <article class="panel"><div class="panel-header"><h3>权限矩阵</h3><span>角色 × 功能</span></div><div class="table-wrap"><table><thead><tr><th>功能</th><th>管理员</th><th>工程师</th><th>分析师</th><th>运维</th><th>治理</th><th>审计</th></tr></thead><tbody id="permissionTable"></tbody></table></div></article>
+          <article class="panel"><div class="panel-header"><h3>权限矩阵</h3><span>角色 x 功能</span></div><div class="table-wrap"><table><thead><tr><th>功能</th><th>管理员</th><th>工程师</th><th>分析师</th><th>运维</th><th>治理</th><th>审计</th></tr></thead><tbody id="permissionTable"></tbody></table></div></article>
         </section>
 
         <section id="operations" class="section">
@@ -245,6 +296,10 @@
             </article>
             <article class="panel"><div class="panel-header"><h3>已生成报表</h3><span>本地会话</span></div><div id="generatedReports" class="card-list"></div></article>
           </div>
+          <article class="panel">
+            <div class="panel-header"><div><p class="panel-index">18 / GATES</p><h3>发布闸口</h3></div><span>本轮收口项</span></div>
+            <div id="releaseGates" class="gate-list"></div>
+          </article>
         </section>
 
         <section id="acceptance" class="section">
@@ -254,6 +309,16 @@
             <article class="panel"><div class="panel-header"><h3>工程资料入口</h3><span>Cursor 可查看</span></div><div class="doc-links">
               <a href="/docs/index.md">文档索引</a><a href="/docs/requirements/product-scope.md">产品范围</a><a href="/docs/api/api-plan.md">接口规划</a><a href="/docs/test/test-plan.md">测试计划</a><a href="/docs/deployment/deployment-plan.md">部署方案</a><a href="/docs/acceptance/acceptance-criteria.md">验收标准</a>
             </div></article>
+          </div>
+          <div class="two-grid">
+            <article class="panel">
+              <div class="panel-header"><div><p class="panel-index">19 / MATERIALS</p><h3>交付材料</h3></div><span>文档与链接</span></div>
+              <div id="acceptanceMaterials" class="material-list"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header"><div><p class="panel-index">20 / RISKS</p><h3>剩余风险</h3></div><span>本轮未关闭</span></div>
+              <div id="acceptanceRisks" class="risk-list"></div>
+            </article>
           </div>
         </section>
       </main>
