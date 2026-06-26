@@ -1,8 +1,8 @@
 export const productBrief = {
-  name: "大数据处理平台",
-  tagline: "面向企业数据工程、治理、分析与运维的一体化数据处理工作台",
+  name: "华东零售集团数据湖处理平台",
+  tagline: "面向门店 POS、会员、仓配、支付流水和营销触点的一体化数据湖工作台",
   positioning:
-    "围绕数据源接入、采集同步、清洗转换聚合、工作流编排、调度运行、质量治理、资产目录、血缘分析、权限审计构建独立产品，不复用其他项目标题模板。",
+    "围绕零售集团数据湖的数据源接入、ETL 清洗、质量规则、血缘追踪、任务调度和治理审批构建独立产品，用于支撑日销售看板、补货预测、会员运营和财务对账。",
   roles: [
     { name: "平台管理员", goal: "维护租户、用户、角色、菜单和系统参数", scope: "全局配置、授权、审计查看" },
     { name: "数据工程师", goal: "接入数据源并编排处理任务", scope: "数据源、采集同步、工作流、任务重跑" },
@@ -14,12 +14,12 @@ export const productBrief = {
 };
 
 export const summary = {
-  projectName: "大数据处理平台",
-  environment: "本地演示 / MVP",
+  projectName: "华东零售集团数据湖处理平台",
+  environment: "零售数据湖演示 / MVP",
   metrics: [
-    { label: "今日处理记录", value: "1,286,400", trend: "+12.4%", status: "normal" },
-    { label: "任务成功率", value: "98.7%", trend: "+1.8%", status: "normal" },
-    { label: "质量通过率", value: "96.2%", trend: "-0.6%", status: "warning" },
+    { label: "今日 POS 明细", value: "1,286,437", trend: "+12.4%", status: "normal" },
+    { label: "调度成功率", value: "98.7%", trend: "+1.8%", status: "normal" },
+    { label: "质量规则通过率", value: "96.2%", trend: "-0.6%", status: "warning" },
     { label: "待处理告警", value: "7", trend: "3 高优先级", status: "danger" },
     { label: "登记数据资产", value: "428", trend: "+26 本周", status: "normal" },
     { label: "血缘关系", value: "1,936", trend: "字段级 1,284", status: "normal" }
@@ -41,15 +41,15 @@ export const summary = {
     { time: "18:00", records: 300400, failed: 316 }
   ],
   reportMetrics: [
-    { name: "订单主题域日处理量", value: "82.4 万", owner: "业务分析组" },
-    { name: "客户画像特征数", value: "126 项", owner: "算法数据组" },
+    { name: "门店销售主题域日处理量", value: "82.4 万", owner: "零售分析组" },
+    { name: "会员画像特征数", value: "126 项", owner: "会员运营数据组" },
     { name: "异常样本待复核", value: "431 条", owner: "质量治理组" },
     { name: "敏感资产下载", value: "12 次", owner: "审计组" }
   ]
 };
 
 export const coreFlow = [
-  { id: "source", title: "创建数据源", detail: "保存连接配置、凭据引用、负责人和连通状态" },
+  { id: "source", title: "登记零售数据源", detail: "保存门店 POS、会员、仓配、支付流水的连接配置和负责人" },
   { id: "ingest", title: "配置采集/同步", detail: "全量、增量、断点续传、字段映射、目标写入策略" },
   { id: "transform", title: "清洗转换聚合", detail: "标准化、去重、空值处理、脱敏、聚合指标" },
   { id: "workflow", title: "编排工作流", detail: "DAG 节点、依赖、参数、版本、发布校验" },
@@ -86,16 +86,16 @@ export const pages = [
 ];
 
 export const dataSources = [
-  { id: "ds-postgres-core", name: "核心业务 PostgreSQL", type: "PostgreSQL", owner: "数据工程组", status: "connected", latency: "38ms", lastCheckedAt: "2026-06-05 09:20", relatedJobs: 6 },
-  { id: "ds-mysql-erp", name: "ERP MySQL", type: "MySQL", owner: "业务分析组", status: "connected", latency: "45ms", lastCheckedAt: "2026-06-05 09:18", relatedJobs: 4 },
-  { id: "ds-kafka-event", name: "实时事件 Kafka", type: "Kafka", owner: "平台运维组", status: "warning", latency: "消费延迟 12m", lastCheckedAt: "2026-06-05 09:15", relatedJobs: 3 },
-  { id: "ds-minio-files", name: "文件资产 MinIO", type: "S3/MinIO", owner: "数据工程组", status: "connected", latency: "31ms", lastCheckedAt: "2026-06-05 09:12", relatedJobs: 5 }
+  { id: "ds-pos-postgres", name: "门店 POS PostgreSQL", type: "PostgreSQL", owner: "数据工程组", status: "connected", latency: "38ms", lastCheckedAt: "2026-06-05 09:20", relatedJobs: 6 },
+  { id: "ds-member-mysql", name: "会员中心 MySQL", type: "MySQL", owner: "会员运营数据组", status: "connected", latency: "45ms", lastCheckedAt: "2026-06-05 09:18", relatedJobs: 4 },
+  { id: "ds-store-kafka", name: "门店事件 Kafka", type: "Kafka", owner: "平台运维组", status: "warning", latency: "消费延迟 12m", lastCheckedAt: "2026-06-05 09:15", relatedJobs: 3 },
+  { id: "ds-receipt-minio", name: "电子小票 MinIO", type: "S3/MinIO", owner: "数据工程组", status: "connected", latency: "31ms", lastCheckedAt: "2026-06-05 09:12", relatedJobs: 5 }
 ];
 
 export const ingestJobs = [
-  { id: "ingest-order", name: "ERP 订单增量采集", source: "ERP MySQL", target: "ods_order", mode: "incremental", schedule: "*/30 * * * *", status: "running", owner: "数据工程组" },
-  { id: "ingest-event", name: "用户行为事件订阅", source: "实时事件 Kafka", target: "ods_user_event", mode: "stream", schedule: "always-on", status: "warning", owner: "平台运维组" },
-  { id: "ingest-file", name: "供应商账单文件采集", source: "文件资产 MinIO", target: "ods_supplier_bill", mode: "batch", schedule: "0 1 * * *", status: "success", owner: "数据工程组" }
+  { id: "ingest-pos-sale", name: "POS 销售明细增量采集", source: "门店 POS PostgreSQL", target: "ods_pos_sale", mode: "incremental", schedule: "*/15 * * * *", status: "running", owner: "数据工程组" },
+  { id: "ingest-store-event", name: "门店客流事件订阅", source: "门店事件 Kafka", target: "ods_store_event", mode: "stream", schedule: "always-on", status: "warning", owner: "平台运维组" },
+  { id: "ingest-receipt-file", name: "电子小票文件采集", source: "电子小票 MinIO", target: "ods_receipt_file", mode: "batch", schedule: "0 1 * * *", status: "success", owner: "数据工程组" }
 ];
 
 export const syncJobs = [
@@ -105,21 +105,21 @@ export const syncJobs = [
 ];
 
 export const transforms = [
-  { id: "tf-order-clean", name: "订单清洗标准化", input: "ods_order", output: "dwd_order_clean", rules: ["空值处理", "金额类型转换", "订单状态枚举"], status: "published" },
-  { id: "tf-user-feature", name: "用户画像特征聚合", input: "ods_user_event", output: "dws_user_feature", rules: ["事件去重", "7日行为聚合", "敏感字段脱敏"], status: "published" },
-  { id: "tf-sales-mart", name: "销售指标宽表聚合", input: "dwd_order_clean", output: "sales_mart.daily_summary", rules: ["区域聚合", "品类聚合", "退款抵扣"], status: "draft" }
+  { id: "tf-sale-clean", name: "POS 销售清洗标准化", input: "ods_pos_sale", output: "dwd_sale_clean", rules: ["空值处理", "金额类型转换", "门店编码映射"], status: "published" },
+  { id: "tf-member-feature", name: "会员画像特征聚合", input: "ods_store_event", output: "dws_member_feature", rules: ["事件去重", "7日行为聚合", "敏感字段脱敏"], status: "published" },
+  { id: "tf-retail-mart", name: "门店销售指标宽表聚合", input: "dwd_sale_clean", output: "retail_mart.daily_summary", rules: ["区域聚合", "品类聚合", "退款抵扣"], status: "draft" }
 ];
 
 export const workflow = {
-  id: "wf-sales-governance",
-  name: "销售主题域治理工作流",
+  id: "wf-retail-sales-governance",
+  name: "门店销售主题域治理工作流",
   version: "v0.5.0",
   status: "published",
   nodes: [
-    { id: "n1", label: "ERP 订单采集", type: "采集", x: 6, y: 42, status: "success" },
-    { id: "n2", label: "客户主数据同步", type: "同步", x: 26, y: 18, status: "success" },
-    { id: "n3", label: "订单清洗", type: "清洗", x: 26, y: 62, status: "success" },
-    { id: "n4", label: "销售指标聚合", type: "聚合", x: 48, y: 42, status: "running" },
+    { id: "n1", label: "POS 明细采集", type: "采集", x: 6, y: 42, status: "success" },
+    { id: "n2", label: "会员主数据同步", type: "同步", x: 26, y: 18, status: "success" },
+    { id: "n3", label: "销售明细清洗", type: "清洗", x: 26, y: 62, status: "success" },
+    { id: "n4", label: "门店指标聚合", type: "聚合", x: 48, y: 42, status: "running" },
     { id: "n5", label: "质量规则检测", type: "质量", x: 70, y: 42, status: "failed" },
     { id: "n6", label: "资产登记/血缘更新", type: "资产", x: 90, y: 42, status: "pending" }
   ],
@@ -133,8 +133,8 @@ export const workflow = {
 };
 
 export const workflows = [
-  { id: "wf-sales-governance", name: "销售主题域治理工作流", version: "v0.5.0", status: "published", schedule: "0 2 * * *", nodes: 6, owner: "数据工程组" },
-  { id: "wf-user-profile", name: "用户画像增量构建", version: "v0.3.0", status: "published", schedule: "*/30 * * * *", nodes: 8, owner: "算法数据组" },
+  { id: "wf-retail-sales-governance", name: "门店销售主题域治理工作流", version: "v0.5.0", status: "published", schedule: "0 2 * * *", nodes: 6, owner: "数据工程组" },
+  { id: "wf-member-profile", name: "会员画像增量构建", version: "v0.3.0", status: "published", schedule: "*/30 * * * *", nodes: 8, owner: "会员运营数据组" },
   { id: "wf-quality-sync", name: "数据质量巡检任务", version: "v0.2.0", status: "published", schedule: "0 */4 * * *", nodes: 4, owner: "质量治理组" }
 ];
 

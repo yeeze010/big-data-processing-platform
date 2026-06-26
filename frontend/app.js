@@ -66,12 +66,19 @@ const statusClass = {
 };
 
 const state = {
+  session: JSON.parse(sessionStorage.getItem("retailDataLakeSession") || "null"),
   sources: [],
   jobs: [],
   sourceRequests: [],
   operationEvents: [],
   generatedReports: [],
   workflow: null
+};
+
+const demoAccounts = {
+  engineer: { password: "Data@2026", label: "数据工程师" },
+  governance: { password: "Govern@2026", label: "治理专员" },
+  auditor: { password: "Audit@2026", label: "审计员" }
 };
 
 async function getData(path) {
@@ -95,6 +102,20 @@ function showToast(message) {
   toast.classList.add("show");
   clearTimeout(showToast.timer);
   showToast.timer = setTimeout(() => toast.classList.remove("show"), 3200);
+}
+
+function showAppSession(session) {
+  state.session = session;
+  sessionStorage.setItem("retailDataLakeSession", JSON.stringify(session));
+  document.querySelector("[data-login-view]").classList.add("is-hidden");
+  document.querySelector("[data-app-view]").classList.remove("is-hidden");
+  document.querySelector("#sessionRole").textContent = `${session.label} / ${session.username}`;
+}
+
+function signOut() {
+  sessionStorage.removeItem("retailDataLakeSession");
+  state.session = null;
+  window.location.reload();
 }
 
 function nowText() {
@@ -606,5 +627,28 @@ document.querySelector("#refreshButton").addEventListener("click", async (event)
   }
 });
 
-bindInteractions();
-loadApp().catch((error) => showToast(error.message));
+document.querySelector("#loginForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = new FormData(event.currentTarget);
+  const role = String(form.get("role"));
+  const username = String(form.get("username")).trim();
+  const password = String(form.get("password"));
+  const account = demoAccounts[role];
+  if (!account || username !== role || password !== account.password) {
+    document.querySelector("#loginMessage").textContent = "账号或密码不匹配。";
+    return;
+  }
+  document.querySelector("#loginMessage").textContent = "登录成功，正在加载数据。";
+  showAppSession({ role, username, label: account.label });
+  bindInteractions();
+  await loadApp();
+  showToast("已进入零售数据湖控制台");
+});
+
+document.querySelector("#logoutButton").addEventListener("click", signOut);
+
+if (state.session) {
+  showAppSession(state.session);
+  bindInteractions();
+  loadApp().catch((error) => showToast(error.message));
+}

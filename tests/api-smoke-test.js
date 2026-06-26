@@ -38,7 +38,7 @@ try {
   assert.ok(summary.throughput.length >= 4);
 
   const brief = await request("/api/product/brief");
-  assert.equal(brief.name, "大数据处理平台");
+  assert.equal(brief.name, "华东零售集团数据湖处理平台");
   assert.ok(brief.roles.length >= 6);
 
   const flow = await request("/api/product/flow");

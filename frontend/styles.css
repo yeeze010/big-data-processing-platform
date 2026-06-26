@@ -1,6 +1,6 @@
 :root {
-  --surface: #ffffff;
-  --canvas: #f3f5f8;
+  --surface: #fbfcfd;
+  --canvas: #f1f4f6;
   --surface-alt: #eef2f7;
   --line: #d5dde8;
   --line-strong: #9cabc0;
@@ -21,6 +21,10 @@
 
 * {
   box-sizing: border-box;
+}
+
+.is-hidden {
+  display: none !important;
 }
 
 html {
@@ -77,6 +81,83 @@ select:focus-visible {
 
 .skip-link:focus {
   top: 12px;
+}
+
+.login-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(340px, 440px);
+  gap: 24px;
+  align-items: center;
+  min-height: 100dvh;
+  padding: 36px;
+  background:
+    linear-gradient(90deg, rgba(17, 56, 183, 0.05) 1px, transparent 1px) 0 0 / 34px 34px,
+    linear-gradient(rgba(17, 56, 183, 0.04) 1px, transparent 1px) 0 0 / 34px 34px,
+    var(--canvas);
+}
+
+.login-copy,
+.login-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.login-copy h1 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 0.98;
+}
+
+.login-copy p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.login-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.login-hints span {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 8px 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.login-panel {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.login-panel label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.login-panel input,
+.login-panel select {
+  min-height: 44px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-alt);
+  color: var(--text);
+  padding: 0 12px;
+}
+
+.form-message {
+  min-height: 22px;
+  margin: 0;
+  color: var(--red);
 }
 
 .app-shell {

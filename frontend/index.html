@@ -9,14 +9,44 @@
   </head>
   <body>
     <a class="skip-link" href="#workspace">跳到控制台</a>
-    <div class="app-shell">
+    <section class="login-shell" data-login-view>
+      <div class="login-copy">
+        <p class="section-kicker">RETAIL DATA LAKE ACCESS</p>
+        <h1>华东零售集团数据湖处理平台</h1>
+        <p>登录前不加载业务数据。进入后可查看门店 POS、会员、仓配、支付流水的数据接入、ETL、质量规则、血缘、调度和治理流程。</p>
+        <div class="login-hints">
+          <span>数据工程师：engineer / Data@2026</span>
+          <span>治理专员：governance / Govern@2026</span>
+          <span>审计员：auditor / Audit@2026</span>
+        </div>
+      </div>
+      <form class="login-panel" id="loginForm">
+        <div>
+          <p class="panel-index">ACCESS / REQUIRED</p>
+          <h2>角色登录</h2>
+        </div>
+        <label>角色
+          <select name="role" required>
+            <option value="engineer">数据工程师</option>
+            <option value="governance">治理专员</option>
+            <option value="auditor">审计员</option>
+          </select>
+        </label>
+        <label>用户名<input name="username" autocomplete="username" required value="engineer" /></label>
+        <label>密码<input name="password" type="password" autocomplete="current-password" required value="Data@2026" /></label>
+        <button type="submit">进入平台</button>
+        <p class="form-message" id="loginMessage" role="status"></p>
+      </form>
+    </section>
+
+    <div class="app-shell is-hidden" data-app-view>
       <aside class="sidebar" aria-label="平台主导航">
         <div class="sidebar-top">
           <div class="brand">
             <span class="brand-mark" aria-hidden="true">DP</span>
             <div>
-              <strong>大数据处理平台</strong>
-              <span>工程控制台 / MVP</span>
+              <strong>零售数据湖平台</strong>
+              <span id="sessionRole">未登录</span>
             </div>
           </div>
           <button
@@ -40,8 +70,9 @@
             <dl>
               <div><dt>调度时区</dt><dd>Asia/Shanghai</dd></div>
               <div><dt>工作流版本</dt><dd>v0.5.0</dd></div>
-              <div><dt>接口模式</dt><dd>演示数据</dd></div>
+              <div><dt>业务场景</dt><dd>零售数据湖</dd></div>
             </dl>
+            <button id="logoutButton" class="button-secondary" type="button">退出登录</button>
           </div>
         </div>
       </aside>
@@ -54,7 +85,7 @@
               <strong>运行总览</strong>
             </div>
             <p class="command-summary">
-              面向数据接入、采集同步、处理编排、质量治理、资产血缘和验收闭环的独立产品控制台。
+              面向门店 POS、会员、仓配、支付流水和营销触点的数据湖 ETL、质量治理、血缘追踪和调度运维控制台。
             </p>
           </div>
           <div class="command-actions">
@@ -71,8 +102,8 @@
         <section id="dashboard" class="section command-center">
           <div class="hero-grid">
             <article class="hero-panel">
-              <p class="section-kicker">CONTROL CENTER / 2026-06-13</p>
-              <h1>运行控制中心</h1>
+              <p class="section-kicker">RETAIL DATA LAKE / 2026-06-13</p>
+              <h1>零售数据湖运行中心</h1>
               <p id="productPositioning" class="hero-copy">加载平台定位中</p>
               <div class="hero-actions">
                 <a href="#pipeline">查看处理编排</a>
@@ -121,7 +152,7 @@
                 <span id="workflowVersion">加载工作流</span>
               </div>
               <div class="canvas-toolbar" aria-label="工作流画布工具">
-                <span>销售主题域</span>
+                <span>门店销售主题域</span>
                 <span class="legend"><i class="dot success"></i>成功</span>
                 <span class="legend"><i class="dot running"></i>运行</span>
                 <span class="legend"><i class="dot failed"></i>失败</span>
