@@ -76,7 +76,7 @@ async function readJson(request) {
 }
 
 async function routeApi(request, response, pathname, url) {
-  if (pathname === "/api/ops/health") {
+  if (pathname === "/api/ops/health" || pathname === "/api/health") {
     sendJson(request, response, {
       status: "UP",
       service: "big-data-processing-platform",
