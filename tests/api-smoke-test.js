@@ -32,13 +32,15 @@ async function post(path, body, expectedStatus = 200) {
 try {
   const health = await request("/api/ops/health");
   assert.equal(health.status, "UP");
+  assert.equal(health.service, "多源异构大数据处理与质量治理平台 API");
+  assert.equal(health.version, "V1.0");
 
   const summary = await request("/api/dashboard/summary");
   assert.ok(summary.metrics.length >= 4);
   assert.ok(summary.throughput.length >= 4);
 
   const brief = await request("/api/product/brief");
-  assert.equal(brief.name, "华东零售集团数据湖处理平台");
+  assert.equal(brief.name, "多源异构大数据处理与质量治理平台");
   assert.ok(brief.roles.length >= 6);
 
   const flow = await request("/api/product/flow");
@@ -101,9 +103,20 @@ try {
   assert.ok(acceptanceCenter.materials.some((item) => item.path.includes("local-verification-2026-06-13")));
   assert.ok(acceptanceCenter.risks.length >= 3);
 
-  const login = await post("/api/auth/login", { role: "engineer", username: "engineer", password: "engineer123" });
-  assert.equal(login.success, true);
-  assert.equal(login.user.role, "engineer");
+  const roleAccounts = [
+    ["admin", "admin", "admin123"],
+    ["engineer", "engineer", "engineer123"],
+    ["analyst", "analyst", "analyst123"],
+    ["governance", "governor", "governor123"],
+    ["ops", "ops", "ops123"],
+    ["auditor", "auditor", "auditor123"]
+  ];
+  for (const [role, username, password] of roleAccounts) {
+    const login = await post("/api/auth/login", { role, username, password });
+    assert.equal(login.success, true);
+    assert.equal(login.user.role, role);
+    assert.ok(login.user.permissions.length >= 2);
+  }
 
   const deniedLogin = await post("/api/auth/login", { role: "analyst", username: "engineer", password: "engineer123" }, 401);
   assert.equal(deniedLogin.success, false);

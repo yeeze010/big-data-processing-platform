@@ -4,36 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f4f6f8" />
-    <title>大数据处理平台 - 工程控制台</title>
+    <title>多源异构大数据处理与质量治理平台</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#workspace">跳到控制台</a>
     <section class="login-shell" data-login-view>
       <div class="login-copy">
-        <p class="section-kicker">RETAIL DATA LAKE ACCESS</p>
-        <h1>华东零售集团数据湖处理平台</h1>
-        <p>登录前不加载业务数据。进入后可查看门店 POS、会员、仓配、支付流水的数据接入、ETL、质量规则、血缘、调度和治理流程。</p>
+        <p class="section-kicker">身份验证</p>
+        <h1>多源异构大数据处理与质量治理平台</h1>
+        <p>版本号 V1.0</p>
+        <p>登录前不加载业务数据。进入后可查看数据库、文件、消息队列和接口数据的接入、处理编排、质量规则、血缘分析、调度和治理流程。</p>
         <div class="login-hints">
-          <span>数据工程师：engineer / Data@2026</span>
-          <span>治理专员：governance / Govern@2026</span>
-          <span>审计员：auditor / Audit@2026</span>
+          <span>管理员：admin / admin123</span>
+          <span>工程师：engineer / engineer123</span>
+          <span>治理专员：governor / governor123</span>
+          <span>分析师：analyst / analyst123</span>
+          <span>运维：ops / ops123</span>
+          <span>审计员：auditor / auditor123</span>
         </div>
       </div>
       <form class="login-panel" id="loginForm">
         <div>
-          <p class="panel-index">ACCESS / REQUIRED</p>
+          <p class="panel-index">访问控制</p>
           <h2>角色登录</h2>
         </div>
         <label>角色
           <select name="role" required>
+            <option value="admin">平台管理员</option>
             <option value="engineer">数据工程师</option>
-            <option value="governance">治理专员</option>
+            <option value="analyst">数据分析师</option>
+            <option value="governance">数据治理专员</option>
+            <option value="ops">运维工程师</option>
             <option value="auditor">审计员</option>
           </select>
         </label>
-        <label>用户名<input name="username" autocomplete="username" required value="engineer" /></label>
-        <label>密码<input name="password" type="password" autocomplete="current-password" required value="Data@2026" /></label>
+        <label>用户名<input name="username" autocomplete="username" required value="admin" /></label>
+        <label>密码<input name="password" type="password" autocomplete="current-password" required value="admin123" /></label>
         <button type="submit">进入平台</button>
         <p class="form-message" id="loginMessage" role="status"></p>
       </form>
@@ -43,9 +50,10 @@
       <aside class="sidebar" aria-label="平台主导航">
         <div class="sidebar-top">
           <div class="brand">
-            <span class="brand-mark" aria-hidden="true">DP</span>
+            <span class="brand-mark" aria-hidden="true"></span>
             <div>
-              <strong>零售数据湖平台</strong>
+              <strong>多源异构大数据处理与质量治理平台</strong>
+              <span>版本号 V1.0</span>
               <span id="sessionRole">未登录</span>
             </div>
           </div>
@@ -70,7 +78,7 @@
             <dl>
               <div><dt>调度时区</dt><dd>Asia/Shanghai</dd></div>
               <div><dt>工作流版本</dt><dd>v0.5.0</dd></div>
-              <div><dt>业务场景</dt><dd>零售数据湖</dd></div>
+              <div><dt>业务场景</dt><dd>多源数据处理</dd></div>
             </dl>
             <button id="logoutButton" class="button-secondary" type="button">退出登录</button>
           </div>
@@ -85,7 +93,7 @@
               <strong>运行总览</strong>
             </div>
             <p class="command-summary">
-              面向门店 POS、会员、仓配、支付流水和营销触点的数据湖 ETL、质量治理、血缘追踪和调度运维控制台。
+              面向数据库、文件、消息队列和接口数据的处理编排、质量治理、血缘追踪和调度运维控制台。
             </p>
           </div>
           <div class="command-actions">
@@ -102,8 +110,8 @@
         <section id="dashboard" class="section command-center">
           <div class="hero-grid">
             <article class="hero-panel">
-              <p class="section-kicker">RETAIL DATA LAKE / 2026-06-13</p>
-              <h1>零售数据湖运行中心</h1>
+              <p class="section-kicker">BIG DATA PROCESSING / 2026-06-13</p>
+              <h1>大数据处理运行中心</h1>
               <p id="productPositioning" class="hero-copy">加载平台定位中</p>
               <div class="hero-actions">
                 <a href="#pipeline">查看处理编排</a>
@@ -152,7 +160,7 @@
                 <span id="workflowVersion">加载工作流</span>
               </div>
               <div class="canvas-toolbar" aria-label="工作流画布工具">
-                <span>门店销售主题域</span>
+                <span>生产与设备主题域</span>
                 <span class="legend"><i class="dot success"></i>成功</span>
                 <span class="legend"><i class="dot running"></i>运行</span>
                 <span class="legend"><i class="dot failed"></i>失败</span>
@@ -264,7 +272,7 @@
           <div class="quality-grid">
             <article class="panel score-panel"><div class="panel-header"><div><p class="panel-index">09 / SCORE</p><h3>最新质量报告</h3></div><span id="qualityScore">加载中</span></div><div id="qualityTrend" class="line-chart"></div><ul id="qualitySamples" class="status-list"></ul></article>
             <article class="panel"><div class="panel-header"><div><p class="panel-index">10 / RULES</p><h3>质量规则</h3></div><span>启用规则</span></div><div id="qualityRules" class="card-list"></div></article>
-            <article class="panel"><div class="panel-header"><div><p class="panel-index">11 / ISSUES</p><h3>异常数据问题池</h3></div><span>派单闭环</span></div><div id="abnormalRecords" class="card-list"></div></article>
+            <article class="panel"><div class="panel-header"><div><p class="panel-index">11 / ISSUES</p><h3>异常数据问题池</h3></div><span>派单、复核、关闭</span></div><div id="abnormalRecords" class="card-list"></div></article>
           </div>
         </section>
 
@@ -286,7 +294,7 @@
           </div>
           <article class="panel">
             <div class="panel-header"><div><p class="panel-index">14 / SOURCES</p><h3>数据源连接</h3></div><span>连通性与影响任务</span></div>
-            <div class="table-wrap"><table><tbody id="dataSourcesTable"></tbody></table></div>
+            <div class="table-wrap"><table><thead><tr><th>数据源</th><th>类型</th><th>负责人</th><th>连接状态</th><th>延迟</th><th>关联任务</th><th>审批操作</th></tr></thead><tbody id="dataSourcesTable"></tbody></table></div>
           </article>
           <div class="three-grid">
             <article class="panel"><div class="panel-header"><div><p class="panel-index">15 / INGEST</p><h3>采集任务</h3></div><span>批量 / 流式 / 文件</span></div><div id="ingestJobs" class="card-list"></div></article>
@@ -325,7 +333,7 @@
                 <button type="submit">生成报表</button>
               </form>
             </article>
-            <article class="panel"><div class="panel-header"><h3>已生成报表</h3><span>本地会话</span></div><div id="generatedReports" class="card-list"></div></article>
+            <article class="panel"><div class="panel-header"><h3>已生成报表</h3><span>生成后可下载</span></div><div id="generatedReports" class="card-list"></div></article>
           </div>
           <article class="panel">
             <div class="panel-header"><div><p class="panel-index">18 / GATES</p><h3>发布闸口</h3></div><span>本轮收口项</span></div>

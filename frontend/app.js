@@ -66,25 +66,33 @@ const statusClass = {
 };
 
 const state = {
-  session: JSON.parse(sessionStorage.getItem("retailDataLakeSession") || "null"),
+  session: JSON.parse(sessionStorage.getItem("dataGovernancePlatformSession") || "null"),
   sources: [],
   jobs: [],
-  sourceRequests: [],
+  abnormal: [],
+  sourceRequests: JSON.parse(localStorage.getItem("dataGovernanceSourceRequests") || "[]"),
   operationEvents: [],
   generatedReports: [],
   workflow: null
-};
-
-const demoAccounts = {
-  engineer: { password: "Data@2026", label: "数据工程师" },
-  governance: { password: "Govern@2026", label: "治理专员" },
-  auditor: { password: "Audit@2026", label: "审计员" }
 };
 
 async function getData(path) {
   const response = await fetch(path);
   const payload = await response.json();
   if (!response.ok || payload.code !== 0) throw new Error(payload.message || `请求失败：${path}`);
+  return payload.data;
+}
+
+async function postJson(path, body) {
+  const response = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  const payload = await response.json();
+  if (!response.ok || payload.code !== 0 || payload.data?.success === false) {
+    throw new Error(payload.data?.message || payload.message || "请求失败");
+  }
   return payload.data;
 }
 
@@ -106,20 +114,57 @@ function showToast(message) {
 
 function showAppSession(session) {
   state.session = session;
-  sessionStorage.setItem("retailDataLakeSession", JSON.stringify(session));
+  sessionStorage.setItem("dataGovernancePlatformSession", JSON.stringify(session));
   document.querySelector("[data-login-view]").classList.add("is-hidden");
   document.querySelector("[data-app-view]").classList.remove("is-hidden");
-  document.querySelector("#sessionRole").textContent = `${session.label} / ${session.username}`;
+  document.querySelector("#sessionRole").textContent = `${session.name} / ${session.username}`;
 }
 
 function signOut() {
-  sessionStorage.removeItem("retailDataLakeSession");
+  sessionStorage.removeItem("dataGovernancePlatformSession");
   state.session = null;
   window.location.reload();
 }
 
+function hasPermission(...permissions) {
+  const granted = state.session?.permissions || [];
+  return permissions.some((permission) => granted.includes(permission));
+}
+
+function lockForm(selector, allowed, message) {
+  const form = document.querySelector(selector);
+  if (!form) return;
+  form.querySelectorAll("input, select, button").forEach((control) => {
+    control.disabled = !allowed;
+  });
+  let note = form.querySelector("[data-access-note]");
+  if (!allowed) {
+    if (!note) {
+      note = document.createElement("p");
+      note.dataset.accessNote = "true";
+      note.className = "access-note";
+      form.append(note);
+    }
+    note.textContent = message;
+  } else if (note) {
+    note.remove();
+  }
+}
+
+function applyRoleAccess() {
+  lockForm("#sourceRequestForm", hasPermission("source:manage"), "当前角色只能查看数据源，不能提交接入申请。");
+  lockForm("#taskTransitionForm", hasPermission("job:manage", "job:rerun"), "当前角色没有任务状态流转权限。");
+  lockForm("#reportCenterForm", hasPermission("report:view", "quality:manage", "audit:view", "source:manage"), "当前角色没有报表生成权限。");
+  renderDataSources(state.sources);
+  renderSourceRequests();
+}
+
 function nowText() {
   return new Date().toLocaleString("zh-CN", { hour12: false });
+}
+
+function persistSourceRequests() {
+  localStorage.setItem("dataGovernanceSourceRequests", JSON.stringify(state.sourceRequests));
 }
 
 function setActiveNavByHash(hash) {
@@ -269,6 +314,9 @@ function renderDataSources(rows) {
       <td>${badge(row.status)}</td>
       <td>${row.latency}</td>
       <td>${row.relatedJobs} 个任务</td>
+      <td>${hasPermission("source:manage") || state.session?.role === "governance"
+        ? `<button class="button-secondary table-action" type="button" data-source-action="approve" data-source-id="${row.id}">${row.status === "pending" ? "审批并测试" : "重新测试"}</button>`
+        : `<span class="muted-action">仅查看</span>`}</td>
     </tr>
   `).join("");
 }
@@ -327,8 +375,15 @@ function renderQuality(rules, report, abnormal) {
   document.querySelector("#qualityRules").innerHTML = rules.map((row) => {
     return card(row.name, `${row.target} / ${row.type}`, `阈值：${row.threshold}`, row.status);
   }).join("");
+  renderAbnormalRecords(abnormal);
+}
+
+function renderAbnormalRecords(abnormal) {
   document.querySelector("#abnormalRecords").innerHTML = abnormal.map((row) => {
-    return card(`${row.asset}.${row.field}`, `${row.count} 条异常 / ${row.assignee}`, row.action, row.status);
+    const action = hasPermission("quality:manage")
+      ? `<div class="card-actions"><button class="button-secondary" type="button" data-abnormal-action="close" data-abnormal-id="${row.id}">${row.status === "已关闭" ? "已关闭" : "关闭问题"}</button></div>`
+      : "";
+    return `<article class="mini-card"><div><strong>${row.asset}.${row.field}</strong>${badge(row.status === "已关闭" ? "done" : "open")}</div><p>${row.count} 条异常 / ${row.assignee}</p><small>${row.action} / ${row.status}</small>${action}</article>`;
   }).join("");
 }
 
@@ -422,7 +477,7 @@ function renderAcceptanceRisks(rows = []) {
 
 function renderSourceRequests() {
   document.querySelector("#sourceRequestList").innerHTML = state.sourceRequests.length
-    ? state.sourceRequests.map((row) => card(row.name, `${row.type} / ${row.owner}`, `${row.createdAt} / ${row.note}`, row.status)).join("")
+    ? state.sourceRequests.map((row) => `<article class="mini-card"><div><strong>${row.name}</strong>${badge(row.status === "已批准" ? "done" : row.status)}</div><p>${row.type} / ${row.owner}</p><small>${row.createdAt} / ${row.note}</small><div class="card-actions">${state.session?.role === "admin" || state.session?.role === "governance" ? `<button class="button-secondary" type="button" data-request-action="approve" data-request-id="${row.id}" ${row.status === "已批准" ? "disabled" : ""}>${row.status === "已批准" ? "已批准" : "审批并测试"}</button>` : ""}</div></article>`).join("")
     : `<p class="empty-state">暂无新的接入申请。</p>`;
 }
 
@@ -436,8 +491,23 @@ function renderOperationTimeline() {
 
 function renderGeneratedReports() {
   document.querySelector("#generatedReports").innerHTML = state.generatedReports.length
-    ? state.generatedReports.map((row) => card(row.name, `${row.period} / ${row.format}`, `${row.createdAt} / ${row.policy}`, "done")).join("")
+    ? state.generatedReports.map((row) => `<article class="mini-card"><div><strong>${row.name}</strong>${badge("done")}</div><p>${row.period} / ${row.format}</p><small>${row.createdAt} / ${row.policy}</small><div class="card-actions"><button class="button-secondary" type="button" data-report-download="${row.id}">下载报表</button></div></article>`).join("")
     : `<p class="empty-state">暂无本地生成报表。</p>`;
+}
+
+function downloadReport(report) {
+  const content = [
+    "报表名称,统计周期,生成时间,软件模块",
+    `${report.name},${report.period},${report.createdAt},多源异构大数据处理与质量治理平台`,
+    "说明,本文件由当前登录会话生成，内容对应页面当前状态"
+  ].join("\n");
+  const url = URL.createObjectURL(new Blob(["\ufeff", content], { type: "text/csv;charset=utf-8" }));
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `${report.name}-${report.period}.csv`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+  showToast(`已下载报表：${report.name}`);
 }
 
 function bindInteractions() {
@@ -471,11 +541,64 @@ function bindInteractions() {
       note: "等待连通性测试与权限审批"
     };
     state.sources = [source, ...state.sources];
-    state.sourceRequests = [source, ...state.sourceRequests];
+    state.sourceRequests = [{ ...source }, ...state.sourceRequests];
+    persistSourceRequests();
     renderDataSources(state.sources);
     renderSourceRequests();
     event.currentTarget.reset();
     showToast(`已提交接入申请：${source.name}`);
+  });
+
+  document.querySelector("#dataSourcesTable").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-source-action]");
+    if (!button) return;
+    const source = state.sources.find((item) => item.id === button.dataset.sourceId);
+    if (!source) return;
+    source.status = "connected";
+    source.latency = "42ms";
+    source.note = "连通性测试通过，已完成审批";
+    source.lastCheckedAt = nowText();
+    state.operationEvents = [{ time: nowText(), title: `数据源审批完成：${source.name}`, detail: "连通性测试通过，已进入可调度状态" }, ...state.operationEvents];
+    renderDataSources(state.sources);
+    renderOperationTimeline();
+    showToast(`已完成审批并测试：${source.name}`);
+  });
+
+  document.querySelector("#sourceRequestList").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-request-action]");
+    if (!button) return;
+    const source = state.sourceRequests.find((item) => item.id === button.dataset.requestId);
+    if (!source) return;
+    source.status = "已批准";
+    source.note = "审批通过，连通性测试通过";
+    const existing = state.sources.find((item) => item.id === source.id);
+    if (existing) Object.assign(existing, { status: "connected", latency: "42ms", note: source.note });
+    persistSourceRequests();
+    state.operationEvents = [{ time: nowText(), title: `接入申请已批准：${source.name}`, detail: "审批通过并完成连通性测试" }, ...state.operationEvents];
+    renderSourceRequests();
+    renderDataSources(state.sources);
+    renderOperationTimeline();
+    showToast(`接入申请已批准：${source.name}`);
+  });
+
+  document.querySelector("#abnormalRecords").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-abnormal-action]");
+    if (!button) return;
+    const issue = state.abnormal.find((item) => item.id === button.dataset.abnormalId);
+    if (!issue) return;
+    issue.status = "已关闭";
+    issue.action = "已完成复核并关闭问题";
+    renderAbnormalRecords(state.abnormal);
+    state.operationEvents = [{ time: nowText(), title: `质量问题已关闭：${issue.asset}.${issue.field}`, detail: `责任人：${issue.assignee}` }, ...state.operationEvents];
+    renderOperationTimeline();
+    showToast("质量问题已关闭");
+  });
+
+  document.querySelector("#generatedReports").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-report-download]");
+    if (!button) return;
+    const report = state.generatedReports.find((item) => item.id === button.dataset.reportDownload);
+    if (report) downloadReport(report);
   });
 
   document.querySelector("#taskTransitionForm").addEventListener("submit", (event) => {
@@ -504,6 +627,7 @@ function bindInteractions() {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const report = {
+      id: `report-${Date.now()}`,
       name: form.get("reportType"),
       period: form.get("reportPeriod"),
       format: "xlsx",
@@ -583,7 +707,11 @@ async function loadApp() {
   document.querySelector("#healthBadge").textContent = health.status === "UP" ? "系统正常" : "系统异常";
   document.querySelector("#healthBadge").className = `status-pill ${health.status === "UP" ? "status-normal" : "status-danger"}`;
 
-  state.sources = [...sources];
+  state.sourceRequests = JSON.parse(localStorage.getItem("dataGovernanceSourceRequests") || "[]");
+  const localSourceIds = new Set(state.sourceRequests.map((item) => item.id));
+  state.sources = [...sources, ...state.sourceRequests
+    .filter((item) => !sources.some((source) => source.id === item.id) && localSourceIds.has(item.id))
+    .map((item) => ({ ...item }))];
   state.jobs = [...jobs];
 
   renderNav(pages);
@@ -596,7 +724,8 @@ async function loadApp() {
   renderWorkflow(workflow);
   renderJobInstances(state.jobs);
   renderTransforms(transforms);
-  renderQuality(rules, report, abnormal);
+  state.abnormal = [...abnormal];
+  renderQuality(rules, report, state.abnormal);
   renderAssets(assets);
   renderLineage(lineage);
   renderDataSources(state.sources);
@@ -610,6 +739,7 @@ async function loadApp() {
   renderSourceRequests();
   renderOperationTimeline();
   renderGeneratedReports();
+  applyRoleAccess();
   inspectNode(workflow.nodes.find((node) => node.status === "failed")?.id || workflow.nodes[0].id);
 }
 
@@ -633,16 +763,16 @@ document.querySelector("#loginForm").addEventListener("submit", async (event) =>
   const role = String(form.get("role"));
   const username = String(form.get("username")).trim();
   const password = String(form.get("password"));
-  const account = demoAccounts[role];
-  if (!account || username !== role || password !== account.password) {
-    document.querySelector("#loginMessage").textContent = "账号或密码不匹配。";
-    return;
+  try {
+    const result = await postJson("/api/auth/login", { role, username, password });
+    document.querySelector("#loginMessage").textContent = "登录成功，正在加载数据。";
+    showAppSession(result.user);
+    bindInteractions();
+    await loadApp();
+    showToast(`已进入平台：${result.user.name}`);
+  } catch (error) {
+    document.querySelector("#loginMessage").textContent = error.message || "账号或密码不匹配。";
   }
-  document.querySelector("#loginMessage").textContent = "登录成功，正在加载数据。";
-  showAppSession({ role, username, label: account.label });
-  bindInteractions();
-  await loadApp();
-  showToast("已进入零售数据湖控制台");
 });
 
 document.querySelector("#logoutButton").addEventListener("click", signOut);

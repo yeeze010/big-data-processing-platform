@@ -14,7 +14,7 @@ DIAGRAMS = OUT / "diagrams"
 
 
 project = {
-    "name": "企业级大数据处理平台",
+    "name": "多源异构大数据处理与质量治理平台",
     "overview": "面向数据团队、业务分析团队和平台运维团队，建设一个支持数据接入、批处理任务编排、数据质量监控、文件管理、权限审计和可视化运维的一体化后台系统。",
     "stack": {
         "frontend": "Vue 3 + TypeScript + Vite + Pinia + Vue Router + Element Plus / Naive UI + ECharts",
@@ -384,7 +384,7 @@ def build_docx(markdown_text):
         doc.add_paragraph(item, style="List Bullet")
     doc.add_heading("15. 风险与应对措施", level=1)
     add_table(doc, ["风险", "应对措施"], risks, [2.1, 5.1])
-    path = DOCS / "企业级大数据处理平台_项目交付文档包.docx"
+    path = DOCS / "多源异构大数据处理与质量治理平台_项目交付文档包.docx"
     doc.save(path)
     return path
 
@@ -428,7 +428,7 @@ def write_diagrams():
     arch = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 760">
 {svg_defs()}
 <rect width="1120" height="760" fill="#0f172a"/><rect width="1120" height="760" fill="url(#grid)"/>
-<text x="32" y="42" class="title">企业级大数据处理平台 - 系统架构图</text>
+<text x="32" y="42" class="title">多源异构大数据处理与质量治理平台 - 系统架构图</text>
 <rect x="40" y="78" width="250" height="590" rx="12" fill="none" stroke="#22d3ee" stroke-dasharray="8,4"/>
 <text x="60" y="100" fill="#22d3ee" font-size="10" font-weight="700">前端与访问层</text>
 <rect x="330" y="78" width="430" height="590" rx="12" fill="none" stroke="#34d399" stroke-dasharray="8,4"/>
@@ -458,7 +458,7 @@ def write_diagrams():
     flow = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 900">
 {svg_defs()}
 <rect width="940" height="900" fill="#0f172a"/><rect width="940" height="900" fill="url(#grid)"/>
-<text x="32" y="42" class="title">企业级大数据处理平台 - 业务流程图</text>
+<text x="32" y="42" class="title">多源异构大数据处理与质量治理平台 - 业务流程图</text>
 {box(365,80,210,58,"创建数据源","录入连接信息并测试","rgba(8,51,68,0.4)","#22d3ee")}
 {box(365,175,210,58,"配置接入任务","来源 / 目标 / 字段映射","rgba(8,51,68,0.4)","#22d3ee")}
 <g transform="translate(470,310)"><polygon points="0,-44 70,0 0,44 -70,0" fill="#0f172a"/><polygon points="0,-44 70,0 0,44 -70,0" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1.5"/><text y="-4" class="label">预检查通过?</text><text y="14" class="small">连接 / 字段 / 权限</text></g>
@@ -476,7 +476,7 @@ def write_diagrams():
     data = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 720">
 {svg_defs()}
 <rect width="1080" height="720" fill="#0f172a"/><rect width="1080" height="720" fill="url(#grid)"/>
-<text x="32" y="42" class="title">企业级大数据处理平台 - 数据流图</text>
+<text x="32" y="42" class="title">多源异构大数据处理与质量治理平台 - 数据流图</text>
 {box(60,130,160,62,"外部数据库","PostgreSQL / MySQL","rgba(30,41,59,0.5)","#94a3b8")}
 {box(60,245,160,62,"消息队列","Kafka Topic","rgba(30,41,59,0.5)","#94a3b8")}
 {box(60,360,160,62,"文件来源","CSV / Excel / JSON","rgba(30,41,59,0.5)","#94a3b8")}
@@ -508,7 +508,7 @@ def main():
     DOCS.mkdir(parents=True, exist_ok=True)
     DIAGRAMS.mkdir(parents=True, exist_ok=True)
     md = build_markdown()
-    md_path = DOCS / "企业级大数据处理平台_项目建设方案.md"
+    md_path = DOCS / "多源异构大数据处理与质量治理平台_项目建设方案.md"
     md_path.write_text(md, encoding="utf-8")
     docx_path = build_docx(md)
     write_diagrams()

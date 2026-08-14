@@ -23,7 +23,7 @@
 </defs>
 
 <rect width="1120" height="760" fill="#0f172a"/><rect width="1120" height="760" fill="url(#grid)"/>
-<text x="32" y="42" class="title">企业级大数据处理平台 - 系统架构图</text>
+<text x="32" y="42" class="title">多源异构大数据处理与质量治理平台 - 系统架构图</text>
 <rect x="40" y="78" width="250" height="590" rx="12" fill="none" stroke="#22d3ee" stroke-dasharray="8,4"/>
 <text x="60" y="100" fill="#22d3ee" font-size="10" font-weight="700">前端与访问层</text>
 <rect x="330" y="78" width="430" height="590" rx="12" fill="none" stroke="#34d399" stroke-dasharray="8,4"/>

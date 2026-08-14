@@ -1023,6 +1023,37 @@ h3 {
   font: 10px var(--mono);
 }
 
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 9px;
+}
+
+.card-actions button,
+.table-action {
+  min-height: 34px;
+  padding: 0 10px;
+  font-size: 11px;
+}
+
+.muted-action,
+.access-note {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.access-note {
+  margin: 0;
+  padding: 8px 10px;
+  border-left: 3px solid var(--amber);
+  background: var(--amber-soft);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .asset-cards {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }

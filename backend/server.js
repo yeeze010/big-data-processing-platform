@@ -79,7 +79,8 @@ async function routeApi(request, response, pathname, url) {
   if (pathname === "/api/ops/health" || pathname === "/api/health") {
     sendJson(request, response, {
       status: "UP",
-      service: "big-data-processing-platform",
+      service: "多源异构大数据处理与质量治理平台 API",
+      version: "V1.0",
       checks: summary.runtime,
       checkedAt: new Date().toISOString()
     });

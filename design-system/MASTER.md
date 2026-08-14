@@ -1,4 +1,4 @@
-# Big Data Processing Platform Design System
+# 多源异构大数据处理与质量治理平台设计规范
 
 This file is the source of truth for UI/UX review and future changes.
 

@@ -44,7 +44,7 @@ function addSheet(name, rows, options = {}) {
 }
 
 const dashboard = wb.worksheets.add("项目总览");
-dashboard.getRange("A1:H1").values = [["企业级大数据处理平台 - 开发交付总览", "", "", "", "", "", "", ""]];
+dashboard.getRange("A1:H1").values = [["多源异构大数据处理与质量治理平台 - 开发交付总览", "", "", "", "", "", "", ""]];
 dashboard.getRange("A1:H1").format = {
   fill: "#1F4E79",
   font: { name: "Microsoft YaHei", size: 15, bold: true, color: "#FFFFFF" },
@@ -149,7 +149,7 @@ for (const sheetName of ["项目总览", "开发排期表", "测试用例表", "
 }
 
 const output = await SpreadsheetFile.exportXlsx(wb);
-await output.save(path.join(outDir, "企业级大数据处理平台_开发排期任务测试验收表.xlsx"));
+await output.save(path.join(outDir, "多源异构大数据处理与质量治理平台_开发排期任务测试验收表.xlsx"));
 
 const errors = await wb.inspect({
   kind: "match",
@@ -158,4 +158,4 @@ const errors = await wb.inspect({
   summary: "final formula error scan",
 });
 console.log(errors.ndjson || "no formula errors");
-console.log(path.join(outDir, "企业级大数据处理平台_开发排期任务测试验收表.xlsx"));
+console.log(path.join(outDir, "多源异构大数据处理与质量治理平台_开发排期任务测试验收表.xlsx"));
