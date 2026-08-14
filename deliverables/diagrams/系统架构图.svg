@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 760">
+
+<defs>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+  </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/>
+  </marker>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap');
+    text { font-family: 'JetBrains Mono', 'Noto Sans SC', 'Microsoft YaHei', sans-serif; }
+    .title { fill:#e2e8f0; font-size:18px; font-weight:700; }
+    .label { fill:white; font-size:12px; font-weight:700; text-anchor:middle; }
+    .sub { fill:#94a3b8; font-size:9px; text-anchor:middle; }
+    .small { fill:#cbd5e1; font-size:8px; text-anchor:middle; }
+    .edge { stroke:#64748b; stroke-width:1.4; fill:none; marker-end:url(#arrow); }
+    .edgeC { stroke:#22d3ee; stroke-width:1.6; fill:none; marker-end:url(#arrow-cyan); }
+  </style>
+</defs>
+
+<rect width="1120" height="760" fill="#0f172a"/><rect width="1120" height="760" fill="url(#grid)"/>
+<text x="32" y="42" class="title">多源异构大数据处理与质量治理平台 - 系统架构图</text>
+<rect x="40" y="78" width="250" height="590" rx="12" fill="none" stroke="#22d3ee" stroke-dasharray="8,4"/>
+<text x="60" y="100" fill="#22d3ee" font-size="10" font-weight="700">前端与访问层</text>
+<rect x="330" y="78" width="430" height="590" rx="12" fill="none" stroke="#34d399" stroke-dasharray="8,4"/>
+<text x="350" y="100" fill="#34d399" font-size="10" font-weight="700">后端服务层</text>
+<rect x="800" y="78" width="280" height="590" rx="12" fill="none" stroke="#a78bfa" stroke-dasharray="8,4"/>
+<text x="820" y="100" fill="#a78bfa" font-size="10" font-weight="700">数据与基础设施</text>
+
+<rect x="80" y="140" width="170" height="62" rx="6" fill="#0f172a"/>
+<rect x="80" y="140" width="170" height="62" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="165.0" y="164" class="label">管理后台</text>
+<text x="165.0" y="182" class="sub">Vue 3 + TypeScript</text>
+
+
+<rect x="80" y="250" width="170" height="62" rx="6" fill="#0f172a"/>
+<rect x="80" y="250" width="170" height="62" rx="6" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1.5"/>
+<text x="165.0" y="274" class="label">Nginx 网关</text>
+<text x="165.0" y="292" class="sub">TLS / 反向代理</text>
+
+
+<rect x="380" y="125" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="380" y="125" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="470.0" y="149" class="label">认证权限服务</text>
+<text x="470.0" y="167" class="sub">JWT / RBAC / 审计</text>
+
+
+<rect x="590" y="125" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="590" y="125" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="680.0" y="149" class="label">数据源服务</text>
+<text x="680.0" y="167" class="sub">连接测试 / 凭据加密</text>
+
+
+<rect x="380" y="235" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="380" y="235" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="470.0" y="259" class="label">接入任务服务</text>
+<text x="470.0" y="277" class="sub">文件 / API / Kafka</text>
+
+
+<rect x="590" y="235" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="590" y="235" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="680.0" y="259" class="label">调度编排服务</text>
+<text x="680.0" y="277" class="sub">DAG / Cron / 重跑</text>
+
+
+<rect x="380" y="345" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="380" y="345" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="470.0" y="369" class="label">质量监控服务</text>
+<text x="470.0" y="387" class="sub">规则 / 报告 / 闭环</text>
+
+
+<rect x="590" y="345" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="590" y="345" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="680.0" y="369" class="label">告警通知服务</text>
+<text x="680.0" y="387" class="sub">站内信 / Webhook</text>
+
+
+<rect x="380" y="455" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="380" y="455" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="470.0" y="479" class="label">文件资产服务</text>
+<text x="470.0" y="497" class="sub">上传 / 预览 / 签名URL</text>
+
+
+<rect x="590" y="455" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="590" y="455" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="680.0" y="479" class="label">运维监控服务</text>
+<text x="680.0" y="497" class="sub">健康 / 指标 / 日志</text>
+
+
+<rect x="850" y="130" width="160" height="62" rx="6" fill="#0f172a"/>
+<rect x="850" y="130" width="160" height="62" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="930.0" y="154" class="label">PostgreSQL</text>
+<text x="930.0" y="172" class="sub">元数据 / 权限 / 实例</text>
+
+
+<rect x="850" y="240" width="160" height="62" rx="6" fill="#0f172a"/>
+<rect x="850" y="240" width="160" height="62" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="930.0" y="264" class="label">Redis</text>
+<text x="930.0" y="282" class="sub">缓存 / 锁 / 队列状态</text>
+
+
+<rect x="850" y="350" width="160" height="62" rx="6" fill="#0f172a"/>
+<rect x="850" y="350" width="160" height="62" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="930.0" y="374" class="label">MinIO</text>
+<text x="930.0" y="392" class="sub">文件 / 日志 / 报告</text>
+
+
+<rect x="850" y="460" width="160" height="62" rx="6" fill="#0f172a"/>
+<rect x="850" y="460" width="160" height="62" rx="6" fill="rgba(251,146,60,0.3)" stroke="#fb923c" stroke-width="1.5"/>
+<text x="930.0" y="484" class="label">处理引擎适配</text>
+<text x="930.0" y="502" class="sub">Spring Batch / Spark</text>
+
+<path d="M250 171 L380 156" class="edgeC"/><path d="M250 281 L380 266" class="edgeC"/>
+<path d="M560 156 L590 156" class="edge"/><path d="M560 266 L590 266" class="edge"/>
+<path d="M770 156 L850 161" class="edge"/><path d="M770 266 L850 271" class="edge"/><path d="M770 376 L850 381" class="edge"/><path d="M770 486 L850 491" class="edge"/>
+<path d="M545 297 L545 345" class="edge"/><path d="M680 297 L680 345" class="edge"/>
+<text x="900" y="705" fill="#94a3b8" font-size="9">部署：Docker + Nginx；数据：PostgreSQL + Redis + MinIO；扩展：Spark/Flink/K8s</text>
+</svg>

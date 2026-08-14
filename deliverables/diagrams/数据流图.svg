@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 720">
+
+<defs>
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+  </pattern>
+  <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/>
+  </marker>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap');
+    text { font-family: 'JetBrains Mono', 'Noto Sans SC', 'Microsoft YaHei', sans-serif; }
+    .title { fill:#e2e8f0; font-size:18px; font-weight:700; }
+    .label { fill:white; font-size:12px; font-weight:700; text-anchor:middle; }
+    .sub { fill:#94a3b8; font-size:9px; text-anchor:middle; }
+    .small { fill:#cbd5e1; font-size:8px; text-anchor:middle; }
+    .edge { stroke:#64748b; stroke-width:1.4; fill:none; marker-end:url(#arrow); }
+    .edgeC { stroke:#22d3ee; stroke-width:1.6; fill:none; marker-end:url(#arrow-cyan); }
+  </style>
+</defs>
+
+<rect width="1080" height="720" fill="#0f172a"/><rect width="1080" height="720" fill="url(#grid)"/>
+<text x="32" y="42" class="title">多源异构大数据处理与质量治理平台 - 数据流图</text>
+
+<rect x="60" y="130" width="160" height="62" rx="6" fill="#0f172a"/>
+<rect x="60" y="130" width="160" height="62" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="140.0" y="154" class="label">外部数据库</text>
+<text x="140.0" y="172" class="sub">PostgreSQL / MySQL</text>
+
+
+<rect x="60" y="245" width="160" height="62" rx="6" fill="#0f172a"/>
+<rect x="60" y="245" width="160" height="62" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="140.0" y="269" class="label">消息队列</text>
+<text x="140.0" y="287" class="sub">Kafka Topic</text>
+
+
+<rect x="60" y="360" width="160" height="62" rx="6" fill="#0f172a"/>
+<rect x="60" y="360" width="160" height="62" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="140.0" y="384" class="label">文件来源</text>
+<text x="140.0" y="402" class="sub">CSV / Excel / JSON</text>
+
+
+<rect x="300" y="245" width="180" height="72" rx="6" fill="#0f172a"/>
+<rect x="300" y="245" width="180" height="72" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="390.0" y="269" class="label">数据接入层</text>
+<text x="390.0" y="287" class="sub">抽取 / 校验 / 标准化</text>
+
+
+<rect x="560" y="130" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="560" y="130" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="650.0" y="154" class="label">任务编排层</text>
+<text x="650.0" y="172" class="sub">DAG / 调度 / 参数</text>
+
+
+<rect x="560" y="245" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="560" y="245" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="650.0" y="269" class="label">处理执行层</text>
+<text x="650.0" y="287" class="sub">转换 / 聚合 / 清洗</text>
+
+
+<rect x="560" y="360" width="180" height="62" rx="6" fill="#0f172a"/>
+<rect x="560" y="360" width="180" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+<text x="650.0" y="384" class="label">质量检测层</text>
+<text x="650.0" y="402" class="sub">规则 / 分数 / 报告</text>
+
+
+<rect x="840" y="130" width="160" height="62" rx="6" fill="#0f172a"/>
+<rect x="840" y="130" width="160" height="62" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="920.0" y="154" class="label">PostgreSQL</text>
+<text x="920.0" y="172" class="sub">元数据 / 结果索引</text>
+
+
+<rect x="840" y="245" width="160" height="62" rx="6" fill="#0f172a"/>
+<rect x="840" y="245" width="160" height="62" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="920.0" y="269" class="label">MinIO</text>
+<text x="920.0" y="287" class="sub">原始文件 / 日志 / 报告</text>
+
+
+<rect x="840" y="360" width="160" height="62" rx="6" fill="#0f172a"/>
+<rect x="840" y="360" width="160" height="62" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="920.0" y="384" class="label">Redis</text>
+<text x="920.0" y="402" class="sub">状态缓存 / 分布式锁</text>
+
+
+<rect x="430" y="540" width="220" height="62" rx="6" fill="#0f172a"/>
+<rect x="430" y="540" width="220" height="62" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="540.0" y="564" class="label">业务用户与运维看板</text>
+<text x="540.0" y="582" class="sub">查询报告 / 下载产物 / 处理告警</text>
+
+<path d="M220 161 L300 270" class="edgeC"/><path d="M220 276 L300 281" class="edgeC"/><path d="M220 391 L300 292" class="edgeC"/>
+<path d="M480 281 L560 161" class="edge"/><path d="M480 281 L560 276" class="edgeC"/><path d="M650 307 L650 360" class="edge"/>
+<path d="M740 161 L840 161" class="edge"/><path d="M740 276 L840 276" class="edge"/><path d="M740 391 L840 391" class="edge"/>
+<path d="M920 307 C920 500 650 510 650 540" class="edge"/><path d="M920 422 C920 610 650 620 650 602" class="edge"/>
+<path d="M560 391 C500 430 500 500 540 540" class="edgeC"/>
+<text x="540" y="675" fill="#94a3b8" font-size="9" text-anchor="middle">数据从外部源进入接入层，经编排和处理产生结果，再由质量检测、文件资产和看板形成闭环。</text>
+</svg>
